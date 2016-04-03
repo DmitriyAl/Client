@@ -1,11 +1,13 @@
 package main.view;
 
 import main.controller.IController;
-import main.model.IModel;
-import main.model.Observer;
+import main.model.*;
+import main.model.Point;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author Dmitriy Albot
@@ -16,7 +18,7 @@ public class View implements IView, Observer {
     private JFrame frame;
     private JPanel desk;
     private JButton startConnection;
-    private JButton pauseConnection;
+    private JRadioButton pauseConnection;
     private JButton stopConnection;
     private JLabel status;
     private static View instance;
@@ -34,7 +36,15 @@ public class View implements IView, Observer {
     private View(IModel model, int deckSize) {
         this.model = model;
         this.deckSize = deckSize;
+        model.addObserver(this);
         initGraphics();
+    }
+
+    public static View getInstance(IModel model) {
+        if (instance == null) {
+            instance = new View(model);
+        }
+        return instance;
     }
 
     private void initGraphics() {
@@ -48,8 +58,10 @@ public class View implements IView, Observer {
         desk.setPreferredSize(new Dimension(deckSize, deckSize));
         desk.setBackground(new Color(255, 255, 255));
         startConnection = new JButton("Start connection");
-        pauseConnection = new JButton("Pause connection");
+        pauseConnection = new JRadioButton("Pause connection");
         stopConnection = new JButton("Stop connection");
+        pauseConnection.setEnabled(false);
+        stopConnection.setEnabled(false);
         status = new JLabel("Ok");
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup()
@@ -57,37 +69,73 @@ public class View implements IView, Observer {
                         .addComponent(status))
                 .addGroup(layout.createParallelGroup()
                         .addComponent(startConnection)
-                        .addComponent(pauseConnection)
-                        .addComponent(stopConnection)));
-        layout.linkSize(SwingConstants.HORIZONTAL, pauseConnection);
+                        .addComponent(stopConnection)
+                        .addComponent(pauseConnection)));
         layout.setVerticalGroup(layout.createParallelGroup()
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(desk)
                         .addComponent(status))
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(startConnection)
-                        .addComponent(pauseConnection)
-                        .addComponent(stopConnection)));
+                        .addComponent(stopConnection)
+                        .addComponent(pauseConnection)));
         layout.linkSize(desk);
         frame.pack();
         frame.setResizable(false);
         frame.setVisible(true);
+        buttonListenersConfig();
     }
 
-    public static View getInstance(IModel model) {
-        if (instance == null) {
-            instance = new View(model);
-        }
-        return instance;
+    private void buttonListenersConfig() {
+        startConnection.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.startConnection();
+                startConnection.setEnabled(false);
+                pauseConnection.setEnabled(true);
+                stopConnection.setEnabled(true);
+            }
+        });
+        pauseConnection.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pauseConnection.isSelected()) {
+                    controller.pauseConnection();
+                    status.setText("Connection paused");
+                } else {
+                    controller.resumeConnection();
+                    status.setText("Connection stopped");
+                }
+            }
+        });
     }
 
     @Override
     public void update() {
-
+        drawPoint(model.getCurrentCommand());
     }
 
     @Override
     public void setController(IController controller) {
         this.controller = controller;
+    }
+
+    private void drawPoint(Command command) {
+        switch (command.getType()) {
+            case MOVE:
+                drawContinuousLine(command.getPoint());
+                break;
+            case START:
+                drawNewLine(command.getPoint());
+                break;
+            default:
+        }
+    }
+
+    private void drawNewLine(Point point) {
+    }
+
+    private void drawContinuousLine(Point point) {
+
     }
 }
