@@ -17,7 +17,7 @@ public class Controller implements IController {
 
     @Override
     public void startConnection() {
-        final Thread modelThread = new Thread(new Runnable() {
+        Thread modelThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 model.startClient();
@@ -33,6 +33,12 @@ public class Controller implements IController {
 
     @Override
     public void resumeConnection() {
-        model.resumeConnection();
+        Thread modelThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                model.resumeConnection();
+            }
+        });
+        modelThread.start();
     }
 }

@@ -56,7 +56,6 @@ public class Model implements IModel {
                 Socket socket = new Socket(HOST, PORT);
                 br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String textCommand = br.readLine();
-                synchronized (lock) {
                     try {
                         currentCommand = parser.parseCommand(textCommand);
                         notifyObservers();
@@ -64,7 +63,6 @@ public class Model implements IModel {
                     } catch (WrongParserCommandException e) {
                         e.printStackTrace();
                     }
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();

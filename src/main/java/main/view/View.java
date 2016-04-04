@@ -2,7 +2,6 @@ package main.view;
 
 import main.controller.IController;
 import main.model.*;
-import main.model.Point;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +23,7 @@ public class View implements IView, Observer {
     private Painter painter;
     private static View instance;
     private int deckSize;
+    private Command currentCommand;
 
     private View(IModel model) {
         this(model, 500);
@@ -34,6 +34,11 @@ public class View implements IView, Observer {
         this.deckSize = deckSize;
         model.addObserver(this);
         initGraphics();
+    }
+
+    @Override
+    public Command getCurrentCommand() {
+        return currentCommand;
     }
 
     public static View getInstance(IModel model) {
@@ -55,7 +60,7 @@ public class View implements IView, Observer {
         frame.getContentPane().setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
-        desk = new DrawPanel();
+        desk = new JPanel();
         desk.setPreferredSize(new Dimension(deckSize, deckSize));
         desk.setBackground(new Color(255, 255, 255));
         startConnection = new JButton("Start connection");
@@ -82,7 +87,7 @@ public class View implements IView, Observer {
                         .addComponent(pauseConnection)));
         layout.linkSize(desk);
         frame.pack();
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setVisible(true);
         buttonListenersConfig();
     }
@@ -113,7 +118,8 @@ public class View implements IView, Observer {
 
     @Override
     public void update() {
-        drawPoint(model.getCurrentCommand());
+        Graphics updatedGraphic = painter.draw(desk,model.getCurrentCommand().getPoint());
+        desk.paintComponents(updatedGraphic);
     }
 
     @Override
@@ -121,14 +127,7 @@ public class View implements IView, Observer {
         this.controller = controller;
     }
 
-    private void drawPoint(Command command) {
-        painter.paint(desk,command.getPoint());
-    }
-
-    private void drawNewLine(Point point) {
-    }
-
-    private void drawContinuousLine(Point point) {
-
-    }
+//    private void drawPoint(Command command) {
+//        painter.draw(desk,command.getPoint());
+//    }
 }

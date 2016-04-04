@@ -3,10 +3,11 @@ package main.view;
 import main.model.Point;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author Albot Dmitriy
  */
 public interface Painter {
-    void paint(JPanel panel, Point point);
+    Graphics draw(JPanel panel, Point point);
 }
