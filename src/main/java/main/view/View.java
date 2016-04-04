@@ -21,13 +21,9 @@ public class View implements IView, Observer {
     private JRadioButton pauseConnection;
     private JButton stopConnection;
     private JLabel status;
+    private Painter painter;
     private static View instance;
     private int deckSize;
-
-    public View() {//todo delete
-        deckSize = 500;
-        initGraphics();
-    }
 
     private View(IModel model) {
         this(model, 500);
@@ -47,6 +43,11 @@ public class View implements IView, Observer {
         return instance;
     }
 
+    @Override
+    public void setPainter(Painter painter) {
+        this.painter = painter;
+    }
+
     private void initGraphics() {
         frame = new JFrame("Graphical client");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -54,7 +55,7 @@ public class View implements IView, Observer {
         frame.getContentPane().setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
-        desk = new JPanel();
+        desk = new DrawPanel();
         desk.setPreferredSize(new Dimension(deckSize, deckSize));
         desk.setBackground(new Color(255, 255, 255));
         startConnection = new JButton("Start connection");
@@ -121,15 +122,7 @@ public class View implements IView, Observer {
     }
 
     private void drawPoint(Command command) {
-        switch (command.getType()) {
-            case MOVE:
-                drawContinuousLine(command.getPoint());
-                break;
-            case START:
-                drawNewLine(command.getPoint());
-                break;
-            default:
-        }
+        painter.paint(desk,command.getPoint());
     }
 
     private void drawNewLine(Point point) {

@@ -7,4 +7,6 @@ import main.controller.IController;
  */
 public interface IView {
     void setController(IController controller);
+
+    void setPainter(Painter painter);
 }

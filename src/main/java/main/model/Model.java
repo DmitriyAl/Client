@@ -60,6 +60,7 @@ public class Model implements IModel {
                     try {
                         currentCommand = parser.parseCommand(textCommand);
                         notifyObservers();
+                        System.out.println(textCommand);
                     } catch (WrongParserCommandException e) {
                         e.printStackTrace();
                     }
