@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Dmitriy Albot
@@ -16,10 +15,11 @@ public class Model implements IModel {
     private Parser parser;
     private List<GraphicsObserver> graphicsObservers;
     private List<ModelObserver> modelObservers;
+    private Deque<Command> commandPool;
     private BufferedReader bufferedReader;
     private Socket socket;
     private final Object lock = new Object();
-    private volatile Command currentCommand;
+//    private volatile Command currentCommand;
     private volatile boolean isPaused;
     private ServerStatus status;
 
@@ -27,6 +27,7 @@ public class Model implements IModel {
         this.status = ServerStatus.SERVER_IS_UNAVAILABLE;
         graphicsObservers = new ArrayList<>();
         modelObservers = new ArrayList<>();
+        commandPool = new LinkedList<>();
     }
 
     public Model(Parser parser) {
@@ -59,8 +60,8 @@ public class Model implements IModel {
     }
 
     @Override
-    public Command getCurrentCommand() {
-        return currentCommand;
+    public Deque<Command> getCommandPool() {
+        return commandPool;
     }
 
     @Override
@@ -108,7 +109,8 @@ public class Model implements IModel {
             }
             attempt = 0;
             try {
-                currentCommand = parser.parseCommand(textCommand);
+                Command currentCommand = parser.parseCommand(textCommand);
+                commandPool.add(currentCommand);
                 notifyGraphicsObservers();
                 System.out.println(textCommand);
             } catch (WrongParserCommandException e) {

@@ -5,5 +5,6 @@ package main.view;
  */
 public enum DrawingType {
     BY_DOTES,
+    LINES,
     BEZIER
 }

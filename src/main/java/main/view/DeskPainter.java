@@ -5,10 +5,11 @@ import main.model.Point;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 
 /**
  * @author Albot Dmitriy
  */
 public interface DeskPainter {
-    Graphics draw(JPanel panel, Command command);
+    Graphics draw(JPanel panel, Deque<Command> commands);
 }

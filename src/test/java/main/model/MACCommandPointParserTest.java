@@ -14,6 +14,6 @@ public class MACCommandPointParserTest {
         Point point = command.getPoint();
         Assert.assertEquals(0.15625,point.getX(),0.00001);
         Assert.assertEquals(0.29208717,point.getY(),0.00001);
-        Assert.assertEquals(-16777216,point.getColour());
+        Assert.assertEquals(-16777216,point.getColor());
     }
 }

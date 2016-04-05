@@ -5,6 +5,7 @@ import main.model.Point;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 
 /**
  * @author Albot Dmitriy
@@ -12,8 +13,8 @@ import java.awt.*;
 public class DotToDotDeskPainter implements DeskPainter {
 
     @Override
-    public Graphics draw(final JPanel panel, Command command) {
-        Point point = command.getPoint();
+    public Graphics draw(final JPanel panel, Deque<Command> commands) {
+        Point point = commands.poll().getPoint();
         Graphics graphics = panel.getGraphics();
         int width = panel.getWidth();
         int height = panel.getHeight();

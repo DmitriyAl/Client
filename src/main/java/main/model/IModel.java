@@ -1,5 +1,8 @@
 package main.model;
 
+import java.util.Deque;
+import java.util.Queue;
+
 /**
  * @author Dmitriy Albot
  */
@@ -11,7 +14,7 @@ public interface IModel {
 
     void notifyModelObservers();
 
-    Command getCurrentCommand();
+    Deque<Command> getCommandPool();
 
     void startClient();
 

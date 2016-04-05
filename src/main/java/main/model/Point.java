@@ -25,7 +25,7 @@ public class Point {
         return y;
     }
 
-    public int getColour() {
+    public int getColor() {
         return colour;
     }
 }

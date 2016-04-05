@@ -108,7 +108,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
 
     @Override
     public void updateGraphics() {
-        Graphics updatedGraphic = deskPainter.draw(desk, model.getCurrentCommand());
+        Graphics updatedGraphic = deskPainter.draw(desk, model.getCommandPool());
         desk.paintComponents(updatedGraphic);
     }
 

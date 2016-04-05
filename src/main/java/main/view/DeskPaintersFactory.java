@@ -10,6 +10,8 @@ public class DeskPaintersFactory {
                 return new DotToDotDeskPainter();
             case BEZIER:
                 return new BezierDeskPainter();
+            case LINES:
+                return new LineDeskPainter();
             default:
                 throw new NoSuchPainterException("Client doesn\'t have this painter");
         }
