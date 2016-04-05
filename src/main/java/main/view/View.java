@@ -2,7 +2,6 @@ package main.view;
 
 import main.controller.IController;
 import main.model.*;
-import main.model.Point;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,7 +56,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
         desk = new JPanel();
-        desk.setIgnoreRepaint(true);
         desk.setPreferredSize(new Dimension(deckSize, deckSize));
         desk.setBackground(new Color(255, 255, 255));
         startConnection = new JButton("Start connection");
@@ -91,7 +89,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             public void actionPerformed(ActionEvent e) {
                 controller.startConnection();
                 startConnection.setEnabled(false);
-                pauseConnection.setEnabled(true);
 
             }
         });
@@ -119,10 +116,12 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         switch (serverStatus) {
             case SERVER_IS_UNAVAILABLE:
                 startConnection.setEnabled(true);
+                pauseConnection.setEnabled(false);
                 status.setText("Server is unavailable");
                 break;
             case SERVER_IS_AVAILABLE:
                 status.setText("Connection established");
+                pauseConnection.setEnabled(true);
                 break;
             default:
                 status.setText("Unknown server status");

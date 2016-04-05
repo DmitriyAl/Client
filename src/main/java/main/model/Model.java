@@ -17,6 +17,7 @@ public class Model implements IModel {
     private List<GraphicsObserver> graphicsObservers;
     private List<ModelObserver> modelObservers;
     private BufferedReader bufferedReader;
+    private Socket socket;
     private final Object lock = new Object();
     private volatile Command currentCommand;
     private volatile boolean isPaused;
@@ -64,24 +65,29 @@ public class Model implements IModel {
 
     @Override
     public void startClient() {
-        establishConnection();
-        startReceiveingMessage();
+        boolean isConnectedToServer = establishConnection();
+        if (isConnectedToServer) {
+            startReceiveingMessage();
+        }
     }
 
-    private void establishConnection() {
+    private boolean establishConnection() {
         try {
-            Socket socket = new Socket(HOST, PORT);
+            socket = new Socket(HOST, PORT);
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             status = ServerStatus.SERVER_IS_AVAILABLE;
             notifyModelObservers();
+            return true;
         } catch (IOException e) {
             status = ServerStatus.SERVER_IS_UNAVAILABLE;
             notifyModelObservers();
+            return false;
         }
     }
 
     private void startReceiveingMessage() {
-        while (true) {
+        int attempt = 0;
+        while (attempt < 5) {
             synchronized (lock) {
                 if (isPaused) {
                     try {
@@ -95,16 +101,27 @@ public class Model implements IModel {
             try {
                 textCommand = bufferedReader.readLine();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Connection reset"); //todo delete
+                attempt++;
+                continue;
+//                e.printStackTrace();
             }
+            attempt = 0;
             try {
                 currentCommand = parser.parseCommand(textCommand);
                 notifyGraphicsObservers();
                 System.out.println(textCommand);
             } catch (WrongParserCommandException e) {
-                System.out.println("Incorrect command");
+                System.out.println("Incorrect command"); //todo delete
             }
         }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        status = ServerStatus.SERVER_IS_UNAVAILABLE;
+        notifyModelObservers();
     }
 
     @Override
@@ -118,7 +135,6 @@ public class Model implements IModel {
             isPaused = false;
             lock.notifyAll();
         }
-
     }
 
     @Override
