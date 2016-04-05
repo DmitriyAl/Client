@@ -77,7 +77,6 @@ public class Model implements IModel {
         } catch (IOException e) {
             status = ServerStatus.SERVER_IS_UNAVAILABLE;
             notifyModelObservers();
-            e.printStackTrace();
         }
     }
 
@@ -116,7 +115,6 @@ public class Model implements IModel {
     @Override
     public void resumeConnection() {
         synchronized (lock) {
-            System.out.println("resume");
             isPaused = false;
             lock.notifyAll();
         }

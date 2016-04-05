@@ -9,7 +9,5 @@ import main.model.Command;
 public interface IView {
     void setController(IController controller);
 
-    void setPainter(Painter painter);
-
-    Command getCurrentCommand();
+    void setDeskPainter(DeskPainter deskPainter);
 }

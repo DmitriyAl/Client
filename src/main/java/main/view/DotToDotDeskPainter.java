@@ -5,12 +5,11 @@ import main.model.Point;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Path2D;
 
 /**
  * @author Albot Dmitriy
  */
-public class DotToDotPainter implements Painter {
+public class DotToDotDeskPainter implements DeskPainter {
 
     @Override
     public Graphics draw(final JPanel panel, Command command) {

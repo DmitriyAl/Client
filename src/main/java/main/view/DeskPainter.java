@@ -9,6 +9,6 @@ import java.awt.*;
 /**
  * @author Albot Dmitriy
  */
-public interface Painter {
+public interface DeskPainter {
     Graphics draw(JPanel panel, Command command);
 }

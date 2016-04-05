@@ -2,6 +2,7 @@ package main.view;
 
 import main.controller.IController;
 import main.model.*;
+import main.model.Point;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,10 +20,9 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private JButton startConnection;
     private JRadioButton pauseConnection;
     private JLabel status;
-    private Painter painter;
+    private DeskPainter deskPainter;
     private static View instance;
     private int deckSize;
-    private Command currentCommand;
     private ServerStatus serverStatus;
 
     private View(IModel model) {
@@ -38,11 +38,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         initGraphics();
     }
 
-    @Override
-    public Command getCurrentCommand() {
-        return currentCommand;
-    }
-
     public static View getInstance(IModel model) {
         if (instance == null) {
             instance = new View(model);
@@ -50,9 +45,8 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         return instance;
     }
 
-    @Override
-    public void setPainter(Painter painter) {
-        this.painter = painter;
+    public void setDeskPainter(DeskPainter deskPainter) {
+        this.deskPainter = deskPainter;
     }
 
     private void initGraphics() {
@@ -63,6 +57,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
         desk = new JPanel();
+        desk.setIgnoreRepaint(true);
         desk.setPreferredSize(new Dimension(deckSize, deckSize));
         desk.setBackground(new Color(255, 255, 255));
         startConnection = new JButton("Start connection");
@@ -105,10 +100,8 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             public void actionPerformed(ActionEvent e) {
                 if (pauseConnection.isSelected()) {
                     controller.pauseConnection();
-                    status.setText("Connection paused");
                 } else {
                     controller.resumeConnection();
-                    status.setText("Connection stopped");
                 }
             }
         });
@@ -116,18 +109,24 @@ public class View implements IView, GraphicsObserver, ModelObserver {
 
     @Override
     public void updateGraphics() {
-        Graphics updatedGraphic = painter.draw(desk, model.getCurrentCommand());
+        Graphics updatedGraphic = deskPainter.draw(desk, model.getCurrentCommand());
         desk.paintComponents(updatedGraphic);
-        desk.repaint();
-//        desk.update(updatedGraphic);
     }
 
     @Override
     public void updateModelObserver() {
         serverStatus = model.getServerStatus();
-        if (serverStatus == ServerStatus.SERVER_IS_UNAVAILABLE) {
-            startConnection.setEnabled(true);
-            status.setText("Server is unavailable");
+        switch (serverStatus) {
+            case SERVER_IS_UNAVAILABLE:
+                startConnection.setEnabled(true);
+                status.setText("Server is unavailable");
+                break;
+            case SERVER_IS_AVAILABLE:
+                status.setText("Connection established");
+                break;
+            default:
+                status.setText("Unknown server status");
+                break;
         }
     }
 
