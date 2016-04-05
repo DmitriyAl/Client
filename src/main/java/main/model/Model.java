@@ -2,7 +2,6 @@ package main.model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -19,9 +18,10 @@ public class Model implements IModel {
     private final Object lock = new Object();
     private volatile Command currentCommand;
     private volatile boolean isStopped;
-
+    private ServerStatus status;
 
     public Model() {
+        this.status = ServerStatus.SERVER_IS_UNAVAILABLE;
         observers = new ArrayList<>();
     }
 
@@ -52,20 +52,22 @@ public class Model implements IModel {
         isStopped = false;
         BufferedReader br = null;
         try {
+            Socket socket = new Socket(HOST, PORT);
+            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while (!isStopped) {
-                Socket socket = new Socket(HOST, PORT);
-                br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String textCommand = br.readLine();
-                    try {
-                        currentCommand = parser.parseCommand(textCommand);
-                        notifyObservers();
-                        System.out.println(textCommand);
-                    } catch (WrongParserCommandException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    currentCommand = parser.parseCommand(textCommand);
+                    notifyObservers();
+                    System.out.println(textCommand);
+                } catch (WrongParserCommandException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            status = ServerStatus.SERVER_IS_UNAVAILABLE;
+            notifyObservers();
+//            e.printStackTrace();
         }
     }
 
@@ -83,5 +85,10 @@ public class Model implements IModel {
     @Override
     public void setParser(Parser parser) {
         this.parser = parser;
+    }
+
+    @Override
+    public ServerStatus getServerStatus() {
+        return status;
     }
 }

@@ -68,7 +68,7 @@ public class View implements IView, Observer {
         stopConnection = new JButton("Stop connection");
         pauseConnection.setEnabled(false);
         stopConnection.setEnabled(false);
-        status = new JLabel("Ok");
+        status = new JLabel();
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup()
                         .addComponent(desk)
@@ -87,7 +87,7 @@ public class View implements IView, Observer {
                         .addComponent(pauseConnection)));
         layout.linkSize(desk);
         frame.pack();
-        frame.setResizable(true);
+        frame.setResizable(false);
         frame.setVisible(true);
         buttonListenersConfig();
     }
@@ -118,7 +118,7 @@ public class View implements IView, Observer {
 
     @Override
     public void update() {
-        Graphics updatedGraphic = painter.draw(desk,model.getCurrentCommand().getPoint());
+        Graphics updatedGraphic = painter.draw(desk, model.getCurrentCommand());
         desk.paintComponents(updatedGraphic);
     }
 

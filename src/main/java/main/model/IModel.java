@@ -17,4 +17,6 @@ public interface IModel {
     void resumeConnection();
 
     void setParser(Parser parser);
+
+    ServerStatus getServerStatus();
 }
