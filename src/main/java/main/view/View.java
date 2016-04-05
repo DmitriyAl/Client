@@ -18,7 +18,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private JPanel desk;
     private JButton startConnection;
     private JRadioButton pauseConnection;
-    private JButton stopConnection;
     private JLabel status;
     private Painter painter;
     private static View instance;
@@ -33,7 +32,9 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private View(IModel model, int deckSize) {
         this.model = model;
         this.deckSize = deckSize;
+        serverStatus = ServerStatus.SERVER_IS_UNAVAILABLE;
         model.addGraphicsObserver(this);
+        model.addModelObserver(this);
         initGraphics();
     }
 
@@ -66,9 +67,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         desk.setBackground(new Color(255, 255, 255));
         startConnection = new JButton("Start connection");
         pauseConnection = new JRadioButton("Pause connection");
-        stopConnection = new JButton("Stop connection");
         pauseConnection.setEnabled(false);
-        stopConnection.setEnabled(false);
         status = new JLabel();
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup()
@@ -76,7 +75,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                         .addComponent(status))
                 .addGroup(layout.createParallelGroup()
                         .addComponent(startConnection)
-                        .addComponent(stopConnection)
                         .addComponent(pauseConnection)));
         layout.setVerticalGroup(layout.createParallelGroup()
                 .addGroup(layout.createSequentialGroup()
@@ -84,7 +82,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                         .addComponent(status))
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(startConnection)
-                        .addComponent(stopConnection)
                         .addComponent(pauseConnection)));
         layout.linkSize(desk);
         frame.pack();
@@ -98,16 +95,9 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.startConnection();
-                switch (model.getServerStatus()) {
-                    case SERVER_IS_AVAILABLE:
-                        startConnection.setEnabled(false);
-                        pauseConnection.setEnabled(true);
-                        stopConnection.setEnabled(true);
-                        status.setText("Server is available");
-                        break;
-                    default:
-                        status.setText("Server is not available");
-                }
+                startConnection.setEnabled(false);
+                pauseConnection.setEnabled(true);
+
             }
         });
         pauseConnection.addActionListener(new ActionListener() {
@@ -128,11 +118,17 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     public void updateGraphics() {
         Graphics updatedGraphic = painter.draw(desk, model.getCurrentCommand());
         desk.paintComponents(updatedGraphic);
+        desk.repaint();
+//        desk.update(updatedGraphic);
     }
 
     @Override
     public void updateModelObserver() {
         serverStatus = model.getServerStatus();
+        if (serverStatus == ServerStatus.SERVER_IS_UNAVAILABLE) {
+            startConnection.setEnabled(true);
+            status.setText("Server is unavailable");
+        }
     }
 
     @Override

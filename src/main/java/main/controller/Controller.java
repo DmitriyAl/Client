@@ -39,5 +39,6 @@ public class Controller implements IController {
                 model.resumeConnection();
             }
         });
+        resumeThread.start();
     }
 }

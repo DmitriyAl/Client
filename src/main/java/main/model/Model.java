@@ -86,9 +86,8 @@ public class Model implements IModel {
             synchronized (lock) {
                 if (isPaused) {
                     try {
-                        wait();
+                        lock.wait();
                     } catch (InterruptedException e) {
-                        System.out.println("waked");
                         e.printStackTrace();
                     }
                 }
@@ -116,12 +115,12 @@ public class Model implements IModel {
 
     @Override
     public void resumeConnection() {
-        System.out.println("resume");
         synchronized (lock) {
+            System.out.println("resume");
             isPaused = false;
             lock.notifyAll();
         }
-//        startReceiveingMessage();
+
     }
 
     @Override
