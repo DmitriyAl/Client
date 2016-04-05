@@ -33,12 +33,11 @@ public class Controller implements IController {
 
     @Override
     public void resumeConnection() {
-        Thread modelThread = new Thread(new Runnable() {
+        Thread resumeThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 model.resumeConnection();
             }
         });
-        modelThread.start();
     }
 }

@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 /**
  * @author Dmitriy Albot
  */
-public class View implements IView, Observer {
+public class View implements IView, GraphicsObserver, ModelObserver {
     private IController controller;
     private IModel model;
     private JFrame frame;
@@ -24,6 +24,7 @@ public class View implements IView, Observer {
     private static View instance;
     private int deckSize;
     private Command currentCommand;
+    private ServerStatus serverStatus;
 
     private View(IModel model) {
         this(model, 500);
@@ -32,7 +33,7 @@ public class View implements IView, Observer {
     private View(IModel model, int deckSize) {
         this.model = model;
         this.deckSize = deckSize;
-        model.addObserver(this);
+        model.addGraphicsObserver(this);
         initGraphics();
     }
 
@@ -97,9 +98,16 @@ public class View implements IView, Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.startConnection();
-                startConnection.setEnabled(false);
-                pauseConnection.setEnabled(true);
-                stopConnection.setEnabled(true);
+                switch (model.getServerStatus()) {
+                    case SERVER_IS_AVAILABLE:
+                        startConnection.setEnabled(false);
+                        pauseConnection.setEnabled(true);
+                        stopConnection.setEnabled(true);
+                        status.setText("Server is available");
+                        break;
+                    default:
+                        status.setText("Server is not available");
+                }
             }
         });
         pauseConnection.addActionListener(new ActionListener() {
@@ -117,17 +125,18 @@ public class View implements IView, Observer {
     }
 
     @Override
-    public void update() {
+    public void updateGraphics() {
         Graphics updatedGraphic = painter.draw(desk, model.getCurrentCommand());
         desk.paintComponents(updatedGraphic);
+    }
+
+    @Override
+    public void updateModelObserver() {
+        serverStatus = model.getServerStatus();
     }
 
     @Override
     public void setController(IController controller) {
         this.controller = controller;
     }
-
-//    private void drawPoint(Command command) {
-//        painter.draw(desk,command.getPoint());
-//    }
 }

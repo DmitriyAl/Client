@@ -14,15 +14,18 @@ public class Model implements IModel {
     public static final String HOST = "127.0.0.1";
     public static final int PORT = 29228;
     private Parser parser;
-    private List<Observer> observers;
+    private List<GraphicsObserver> graphicsObservers;
+    private List<ModelObserver> modelObservers;
+    private BufferedReader bufferedReader;
     private final Object lock = new Object();
     private volatile Command currentCommand;
-    private volatile boolean isStopped;
+    private volatile boolean isPaused;
     private ServerStatus status;
 
     public Model() {
         this.status = ServerStatus.SERVER_IS_UNAVAILABLE;
-        observers = new ArrayList<>();
+        graphicsObservers = new ArrayList<>();
+        modelObservers = new ArrayList<>();
     }
 
     public Model(Parser parser) {
@@ -31,14 +34,26 @@ public class Model implements IModel {
     }
 
     @Override
-    public void addObserver(Observer observer) {
-        observers.add(observer);
+    public void addGraphicsObserver(GraphicsObserver graphicsObserver) {
+        graphicsObservers.add(graphicsObserver);
     }
 
     @Override
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.update();
+    public void addModelObserver(ModelObserver modelObserver) {
+        modelObservers.add(modelObserver);
+    }
+
+    @Override
+    public void notifyGraphicsObservers() {
+        for (GraphicsObserver graphicsObserver : graphicsObservers) {
+            graphicsObserver.updateGraphics();
+        }
+    }
+
+    @Override
+    public void notifyModelObservers() {
+        for (ModelObserver modelObserver : modelObservers) {
+            modelObserver.updateModelObserver();
         }
     }
 
@@ -49,37 +64,64 @@ public class Model implements IModel {
 
     @Override
     public void startClient() {
-        isStopped = false;
-        BufferedReader br = null;
+        establishConnection();
+        startReceiveingMessage();
+    }
+
+    private void establishConnection() {
         try {
             Socket socket = new Socket(HOST, PORT);
-            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            while (!isStopped) {
-                String textCommand = br.readLine();
-                try {
-                    currentCommand = parser.parseCommand(textCommand);
-                    notifyObservers();
-                    System.out.println(textCommand);
-                } catch (WrongParserCommandException e) {
-                    e.printStackTrace();
-                }
-            }
+            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            status = ServerStatus.SERVER_IS_AVAILABLE;
+            notifyModelObservers();
         } catch (IOException e) {
             status = ServerStatus.SERVER_IS_UNAVAILABLE;
-            notifyObservers();
-//            e.printStackTrace();
+            notifyModelObservers();
+            e.printStackTrace();
+        }
+    }
+
+    private void startReceiveingMessage() {
+        while (true) {
+            synchronized (lock) {
+                if (isPaused) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        System.out.println("waked");
+                        e.printStackTrace();
+                    }
+                }
+            }
+            String textCommand = null;
+            try {
+                textCommand = bufferedReader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                currentCommand = parser.parseCommand(textCommand);
+                notifyGraphicsObservers();
+                System.out.println(textCommand);
+            } catch (WrongParserCommandException e) {
+                System.out.println("Incorrect command");
+            }
         }
     }
 
     @Override
     public void pauseConnection() {
-        isStopped = true;
+        isPaused = true;
     }
 
     @Override
     public void resumeConnection() {
-        isStopped = false;
-        startClient();
+        System.out.println("resume");
+        synchronized (lock) {
+            isPaused = false;
+            lock.notifyAll();
+        }
+//        startReceiveingMessage();
     }
 
     @Override

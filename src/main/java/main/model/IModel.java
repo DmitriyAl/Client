@@ -4,9 +4,12 @@ package main.model;
  * @author Dmitriy Albot
  */
 public interface IModel {
-    void addObserver(Observer observer);
+    void addGraphicsObserver(GraphicsObserver graphicsObserver);
+    void addModelObserver(ModelObserver modelObserver);
 
-    void notifyObservers();
+    void notifyGraphicsObservers();
+
+    void notifyModelObservers();
 
     Command getCurrentCommand();
 

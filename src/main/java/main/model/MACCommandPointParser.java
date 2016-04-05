@@ -7,18 +7,23 @@ import java.util.StringTokenizer;
  */
 public class MACCommandPointParser implements Parser {
     @Override
-    public Command parseCommand(String command) { //todo
+    public Command parseCommand(String command) throws WrongParserCommandException{
         StringTokenizer parser = new StringTokenizer(command, ";");
-        try {
-            String mac = parser.nextToken();
-            analyzeMAC(mac);
-            CommandType commandType = determineCommandType(parser.nextToken());
-            Point point = new Point(new Float(parser.nextToken()), new Float(parser.nextToken()), new Integer(parser.nextToken()));
-            return new Command(mac, commandType, point);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (parser.countTokens() != 5) {
+            throw new WrongParserCommandException("Wrong command format");
         }
-        throw new WrongParserCommandException("Can\'t parse this command");
+        String mac = parser.nextToken();
+        analyzeMAC(mac);
+        CommandType commandType = determineCommandType(parser.nextToken());
+        try {
+            float x = Float.parseFloat(parser.nextToken());
+            float y = Float.parseFloat(parser.nextToken());
+            int colour = Integer.parseInt(parser.nextToken());
+            Point point = new Point(x, y, colour);
+            return new Command(mac, commandType, point);
+        } catch (NumberFormatException e) {
+            throw new WrongParserCommandException("Wrong coordinates values");
+        }
     }
 
     private CommandType determineCommandType(String command) {
@@ -28,11 +33,25 @@ public class MACCommandPointParser implements Parser {
             case "move":
                 return CommandType.MOVE;
             default:
-                throw new NoSuchCommandException("Parser can\'t recognize this command");
+                throw new WrongParserCommandException("Parser can\'t recognize this command");
         }
     }
 
-    private void analyzeMAC(String mac) {
-
+    private void analyzeMAC(String mac) throws WrongMACAddressException {
+        StringTokenizer parser = new StringTokenizer(mac, ":");
+        if (parser.countTokens() != 6) {
+            throw new WrongMACAddressException("Wrong MAC address");
+        }
+        for (int i = 0; i < parser.countTokens(); i++) {
+            String currentNumber = parser.nextToken();
+            if (currentNumber.length() != 2) {
+                throw new WrongMACAddressException("Wrong MAC address");
+            }
+            try {
+                int number = Integer.parseInt(currentNumber, 16);
+            } catch (NumberFormatException e) {
+                throw new WrongMACAddressException("Wrong MAC address");
+            }
+        }
     }
 }
