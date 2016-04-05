@@ -16,11 +16,9 @@ import main.view.View;
 public class Main {
     public static void main(String[] args) {
         Parser parser = new MACCommandPointParser();
-        DeskPainter deskPainter = new DotToDotDeskPainter();
         Model model = new Model(parser);
         IView view = View.getInstance(model);
         IController controller = new Controller(model, view);
         view.setController(controller);
-        view.setDeskPainter(deskPainter);
     }
 }

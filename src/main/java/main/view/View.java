@@ -19,6 +19,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private JButton startConnection;
     private JRadioButton pauseConnection;
     private JLabel status;
+    private JComboBox<DrawingType> drawingTypeJComboBox;
     private DeskPainter deskPainter;
     private static View instance;
     private int deckSize;
@@ -44,10 +45,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         return instance;
     }
 
-    public void setDeskPainter(DeskPainter deskPainter) {
-        this.deskPainter = deskPainter;
-    }
-
     private void initGraphics() {
         frame = new JFrame("Graphical client");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -62,18 +59,22 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         pauseConnection = new JRadioButton("Pause connection");
         pauseConnection.setEnabled(false);
         status = new JLabel();
+        drawingTypeJComboBox = new JComboBox<>(DrawingType.values());
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup()
                         .addComponent(desk)
                         .addComponent(status))
                 .addGroup(layout.createParallelGroup()
+                        .addComponent(drawingTypeJComboBox)
                         .addComponent(startConnection)
                         .addComponent(pauseConnection)));
+        layout.linkSize(drawingTypeJComboBox);
         layout.setVerticalGroup(layout.createParallelGroup()
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(desk)
                         .addComponent(status))
                 .addGroup(layout.createSequentialGroup()
+                        .addComponent(drawingTypeJComboBox)
                         .addComponent(startConnection)
                         .addComponent(pauseConnection)));
         layout.linkSize(desk);
@@ -89,7 +90,8 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             public void actionPerformed(ActionEvent e) {
                 controller.startConnection();
                 startConnection.setEnabled(false);
-
+                drawingTypeJComboBox.setEnabled(false);
+                deskPainter = DeskPaintersFactory.getPainter((DrawingType) drawingTypeJComboBox.getSelectedItem());
             }
         });
         pauseConnection.addActionListener(new ActionListener() {
@@ -117,6 +119,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             case SERVER_IS_UNAVAILABLE:
                 startConnection.setEnabled(true);
                 pauseConnection.setEnabled(false);
+                drawingTypeJComboBox.setEnabled(true);
                 status.setText("Server is unavailable");
                 break;
             case SERVER_IS_AVAILABLE:
