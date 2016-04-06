@@ -16,22 +16,18 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private IModel model;
     private JFrame frame;
     private JPanel desk;
+    private JPanel configPanel;
     private JButton startConnection;
     private JRadioButton pauseConnection;
     private JLabel status;
     private JComboBox<DrawingType> drawingTypeJComboBox;
     private DeskPainter deskPainter;
     private static View instance;
-    private int deckSize;
     private ServerStatus serverStatus;
 
-    private View(IModel model) {
-        this(model, 500);
-    }
 
-    private View(IModel model, int deckSize) {
+    private View(IModel model) {
         this.model = model;
-        this.deckSize = deckSize;
         serverStatus = ServerStatus.SERVER_IS_UNAVAILABLE;
         model.addGraphicsObserver(this);
         model.addModelObserver(this);
@@ -48,37 +44,32 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private void initGraphics() {
         frame = new JFrame("Graphical client");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        GroupLayout layout = new GroupLayout(frame.getContentPane());
-        frame.getContentPane().setLayout(layout);
+        configPanel = new JPanel();
+        GroupLayout layout = new GroupLayout(configPanel);
+        configPanel.setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
         desk = new JPanel();
-        desk.setPreferredSize(new Dimension(deckSize, deckSize));
         desk.setBackground(new Color(255, 255, 255));
         startConnection = new JButton("Start connection");
         pauseConnection = new JRadioButton("Pause connection");
         pauseConnection.setEnabled(false);
         status = new JLabel();
         drawingTypeJComboBox = new JComboBox<>(DrawingType.values());
-        layout.setHorizontalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup()
-                        .addComponent(desk)
-                        .addComponent(status))
-                .addGroup(layout.createParallelGroup()
-                        .addComponent(drawingTypeJComboBox)
-                        .addComponent(startConnection)
-                        .addComponent(pauseConnection)));
+        layout.setHorizontalGroup(layout.createParallelGroup()
+                .addComponent(drawingTypeJComboBox)
+                .addComponent(startConnection)
+                .addComponent(pauseConnection));
         layout.linkSize(drawingTypeJComboBox);
-        layout.setVerticalGroup(layout.createParallelGroup()
-                .addGroup(layout.createSequentialGroup()
-                        .addComponent(desk)
-                        .addComponent(status))
-                .addGroup(layout.createSequentialGroup()
-                        .addComponent(drawingTypeJComboBox)
-                        .addComponent(startConnection)
-                        .addComponent(pauseConnection)));
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addComponent(drawingTypeJComboBox)
+                .addComponent(startConnection)
+                .addComponent(pauseConnection));
         layout.linkSize(desk);
-        frame.pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.add(desk);
+        frame.add(BorderLayout.EAST,configPanel);
+        frame.setSize(screenSize);
         frame.setResizable(false);
         frame.setVisible(true);
         buttonListenersConfig();
