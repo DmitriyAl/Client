@@ -19,7 +19,6 @@ public class Model implements IModel {
     private BufferedReader bufferedReader;
     private Socket socket;
     private final Object lock = new Object();
-//    private volatile Command currentCommand;
     private volatile boolean isPaused;
     private ServerStatus status;
 

@@ -68,9 +68,10 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         layout.linkSize(desk);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.add(desk);
-        frame.add(BorderLayout.EAST,configPanel);
+        frame.add(BorderLayout.EAST, configPanel);
+        frame.add(BorderLayout.SOUTH, status);
         frame.setSize(screenSize);
-        frame.setResizable(false);
+//        frame.setResizable(false);
         frame.setVisible(true);
         buttonListenersConfig();
     }
