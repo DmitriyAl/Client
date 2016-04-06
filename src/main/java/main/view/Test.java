@@ -7,7 +7,6 @@ import main.model.Model;
  */
 public class Test {
     public static void main(String[] args) {
-        View view = View.getInstance(new Model());
-        view.updateGraphics();
+        System.out.println(Math.pow(0f, 0f));
     }
 }

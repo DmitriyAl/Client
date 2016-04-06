@@ -11,6 +11,11 @@ public class Point {
     public Point() {
     }
 
+    public Point(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public Point(float x, float y, int colour) {
         this.x = x;
         this.y = y;
@@ -27,5 +32,14 @@ public class Point {
 
     public int getColor() {
         return colour;
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                ", colour=" + colour +
+                '}';
     }
 }
