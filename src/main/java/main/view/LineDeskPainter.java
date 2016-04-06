@@ -28,24 +28,22 @@ public class LineDeskPainter implements DeskPainter {
             color = new Color(0, 0, 0);
         }
         g2d.setColor(color);
-        switch (command.getType()) {
-            case START:
-                int x = ((int) (command.getPoint().getX() * panel.getWidth()));
-                int y = ((int) (command.getPoint().getY() * panel.getHeight()));
-                g2d.drawOval(x, y, 1, 1);
-                return graphics;
-            case MOVE:
-                Command tempCommand = commands.pollLast();
-                int x2 = ((int) (tempCommand.getPoint().getX() * panel.getWidth()));
-                int y2 = ((int) (tempCommand.getPoint().getY() * panel.getHeight()));
-                command = commands.peekLast();
-                int x1 = ((int) (command.getPoint().getX() * panel.getWidth()));
-                int y1 = ((int) (command.getPoint().getY() * panel.getHeight()));
-                g2d.drawLine(x1, y1, x2, y2);
-                commands.add(tempCommand);
-                return graphics;
-            default:
-                return g2d;
+        if (command.getType() == CommandType.START || commands.size() == 1) {
+            int x = ((int) (command.getPoint().getX() * panel.getWidth()));
+            int y = ((int) (command.getPoint().getY() * panel.getHeight()));
+            g2d.drawOval(x, y, 1, 1);
+            return graphics;
+        } else if (command.getType() == CommandType.MOVE) {
+            Command tempCommand = commands.pollLast();
+            int x2 = ((int) (tempCommand.getPoint().getX() * panel.getWidth()));
+            int y2 = ((int) (tempCommand.getPoint().getY() * panel.getHeight()));
+            command = commands.peekLast();
+            int x1 = ((int) (command.getPoint().getX() * panel.getWidth()));
+            int y1 = ((int) (command.getPoint().getY() * panel.getHeight()));
+            g2d.drawLine(x1, y1, x2, y2);
+            commands.add(tempCommand);
+            return graphics;
         }
+        return g2d;
     }
 }
