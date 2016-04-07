@@ -1,6 +1,6 @@
 package main.view.painters;
 
-import main.view.NoSuchPainterException;
+import main.view.painters.exceptions.NoSuchPainterException;
 
 /**
  * @author Dmitriy Albot

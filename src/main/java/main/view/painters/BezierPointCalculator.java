@@ -14,7 +14,7 @@ import java.util.*;
 public class BezierPointCalculator {
     private List<Command> currentCommands;
     private Deque<Command> transformedPoints;
-    private Deque<Deque<Command>> picture;
+    private List<Deque<Command>> picture;
     private float accuracy;
 
     public BezierPointCalculator(int accuracy) {
@@ -24,7 +24,7 @@ public class BezierPointCalculator {
         picture = new LinkedList<>();
     }
 
-    public Deque<Deque<Command>> getPicture() {
+    public List<Deque<Command>> getPicture() {
         return picture;
     }
 

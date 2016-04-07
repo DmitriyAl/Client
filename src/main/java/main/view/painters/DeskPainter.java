@@ -11,5 +11,5 @@ import java.util.*;
  * @author Albot Dmitriy
  */
 public interface DeskPainter {
-    Graphics draw(JPanel panel, Deque<Command> commands);
+    void draw(JPanel desk,Deque<Command> commands);
 }

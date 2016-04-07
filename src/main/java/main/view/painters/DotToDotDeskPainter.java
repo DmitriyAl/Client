@@ -2,8 +2,7 @@ package main.view.painters;
 
 import main.model.Command;
 import main.model.Point;
-import main.view.ColorLibrary;
-import main.view.NoSuchColorInLibraryException;
+import main.view.painters.exceptions.NoSuchColorInLibraryException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +14,7 @@ import java.util.*;
 public class DotToDotDeskPainter implements DeskPainter {
 
     @Override
-    public Graphics draw(final JPanel panel, Deque<Command> commands) {
+    public void draw(final JPanel panel, Deque<Command> commands) { //todo fix
         Graphics graphics = panel.getGraphics();
         Command command = commands.peekLast();
         Point point = command.getPoint();
@@ -29,6 +28,6 @@ public class DotToDotDeskPainter implements DeskPainter {
         int width = panel.getWidth();
         int height = panel.getHeight();
         graphics.drawOval((int) (point.getX() * width), (int) (point.getY() * height), 5, 5);
-        return graphics;
+//        return graphics;
     }
 }

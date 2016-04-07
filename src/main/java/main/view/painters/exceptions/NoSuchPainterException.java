@@ -1,4 +1,4 @@
-package main.view;
+package main.view.painters.exceptions;
 
 /**
  * @author Dmitriy Albot

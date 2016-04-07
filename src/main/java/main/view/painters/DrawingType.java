@@ -6,6 +6,5 @@ package main.view.painters;
 public enum DrawingType {
     BY_DOTES,
     LINES,
-    BEZIER,
-    THIRD_ORDER_BEZIER
+    BEZIER
 }

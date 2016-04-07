@@ -1,4 +1,6 @@
-package main.view;
+package main.view.painters;
+
+import main.view.painters.exceptions.NoSuchColorInLibraryException;
 
 import java.awt.*;
 import java.util.HashMap;

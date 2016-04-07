@@ -1,8 +1,7 @@
 package main.view.painters;
 
 import main.model.*;
-import main.view.ColorLibrary;
-import main.view.NoSuchColorInLibraryException;
+import main.view.painters.exceptions.NoSuchColorInLibraryException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +16,7 @@ public class LineDeskPainter implements DeskPainter {
     }
 
     @Override
-    public Graphics draw(JPanel panel, Deque<Command> commands) {
+    public void draw(JPanel panel, Deque<Command> commands) { //todo fix
         Graphics graphics = panel.getGraphics();
         Graphics2D g2d = (Graphics2D) graphics;
         Command command = commands.peekLast();
@@ -32,7 +31,7 @@ public class LineDeskPainter implements DeskPainter {
             int x = ((int) (command.getPoint().getX() * panel.getWidth()));
             int y = ((int) (command.getPoint().getY() * panel.getHeight()));
             g2d.drawOval(x, y, 1, 1);
-            return graphics;
+//            return graphics;
         } else if (command.getType() == CommandType.MOVE) {
             Command tempCommand = commands.pollLast();
             int x2 = ((int) (tempCommand.getPoint().getX() * panel.getWidth()));
@@ -42,8 +41,8 @@ public class LineDeskPainter implements DeskPainter {
             int y1 = ((int) (command.getPoint().getY() * panel.getHeight()));
             g2d.drawLine(x1, y1, x2, y2);
             commands.add(tempCommand);
-            return graphics;
+//            return graphics;
         }
-        return g2d;
+//        return g2d;
     }
 }

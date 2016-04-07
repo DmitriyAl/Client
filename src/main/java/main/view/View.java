@@ -52,7 +52,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         configPanel.setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
-        desk = new JPanel();
+        desk = new DrawingBoard();
         desk.setBackground(new Color(255, 255, 255));
         startConnection = new JButton("Start connection");
         pauseConnection = new JRadioButton("Pause connection");
@@ -74,7 +74,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         frame.add(BorderLayout.EAST, configPanel);
         frame.add(BorderLayout.SOUTH, status);
         frame.setSize(screenSize);
-//        frame.setResizable(false);
         frame.setVisible(true);
         buttonListenersConfig();
     }
@@ -103,8 +102,8 @@ public class View implements IView, GraphicsObserver, ModelObserver {
 
     @Override
     public void updateGraphics() {
-        Graphics updatedGraphic = deskPainter.draw(desk, model.getCommandPool());
-        desk.paintComponents(updatedGraphic);
+        deskPainter.draw(desk, model.getCommandPool());
+        desk.repaint();
     }
 
     @Override
