@@ -2,10 +2,9 @@ package main.view.painters;
 
 import main.model.*;
 import main.model.Point;
-import main.view.BinomialCoefficientCalculator;
+import main.view.painters.helpers.BinomialCoefficientCalculator;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.*;
 

@@ -1,7 +1,6 @@
-package main.view;
+package main.view.painters.helpers;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * @author Dmitriy Albot
@@ -9,16 +8,16 @@ import java.math.BigInteger;
 public class BinomialCoefficientCalculator {
     private static BigDecimal[][] bigIntCoefs;
     private static long[][] longCoefs;
-    private static int maxLongCoef = 66;
+    private static final int MAX_LONG_COEF = 66;
     private static int maxBigIntCoef = 200;
 
     static {
         initBigInt(maxBigIntCoef);
-        initFloat(maxLongCoef);
+        initFloat(MAX_LONG_COEF);
     }
 
     public static int getMaxLongCoef() {
-        return maxLongCoef;
+        return MAX_LONG_COEF;
     }
 
     public static int getMaxBigIntCoef() {
@@ -44,7 +43,18 @@ public class BinomialCoefficientCalculator {
     }
 
     public static BigDecimal getBigIntCoef(int n, int k) {
-        return bigIntCoefs[n][k];
+        try {
+            return bigIntCoefs[n][k];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            calculateNewCoefficients(n);
+            return bigIntCoefs[n][k];
+        }
+    }
+
+    private static void calculateNewCoefficients(int n) {
+        maxBigIntCoef = n * 2;
+        bigIntCoefs = new BigDecimal[maxBigIntCoef][maxBigIntCoef];
+        initBigInt(maxBigIntCoef);
     }
 
     public static long getLongCoef(int n, int k) {
