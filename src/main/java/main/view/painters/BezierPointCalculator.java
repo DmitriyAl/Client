@@ -4,6 +4,7 @@ import main.model.*;
 import main.model.Point;
 import main.view.BinomialCoefficientCalculator;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.*;
@@ -82,7 +83,7 @@ public class BezierPointCalculator {
     private Deque<Command> slowTransform() {
         int size = currentCommands.size();
         transformedPoints = new LinkedList<>();
-        for (float t = 0; t <= 1; t += 1 / accuracy) {
+        for (float t = 0; t <= 1; t += 1f / (accuracy * size)) {
             float xCoord = 0;
             float yCoord = 0;
             Point point = null;
@@ -91,12 +92,12 @@ public class BezierPointCalculator {
                 float currentX = point.getX();
                 float currentY = point.getY();
                 double tInPower = Math.pow(t, j);
-                double oneMinusTInPower = Math.pow(1 - t, 1 - j);
-                xCoord += Float.valueOf(String.valueOf(BinomialCoefficientCalculator.getBigIntCoef(size, j).multiply(new BigInteger(String.valueOf(currentX * tInPower * oneMinusTInPower)))));
-                yCoord += Float.valueOf(BinomialCoefficientCalculator.getBigIntCoef(size, j).multiply(new BigInteger(String.valueOf(currentY * tInPower * oneMinusTInPower))).toString());
+                double oneMinusTInPower = Math.pow(1 - t, size - 1 - j);
+                xCoord += Float.valueOf(String.valueOf(BinomialCoefficientCalculator.getBigIntCoef(size-1, j).multiply(new BigDecimal(currentX * tInPower * oneMinusTInPower))));
+                yCoord += Float.valueOf(String.valueOf(BinomialCoefficientCalculator.getBigIntCoef(size-1, j).multiply(new BigDecimal(currentY * tInPower * oneMinusTInPower))));
             }
             Command currentCommand = formACommand(transformedPoints, xCoord, yCoord, point.getColor());
-            currentCommands.add(currentCommand);
+            transformedPoints.add(currentCommand);
         }
         return transformedPoints;
     }
