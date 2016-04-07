@@ -1,4 +1,4 @@
-package main.view;
+package main.view.painters;
 
 import main.model.Command;
 import main.model.Point;

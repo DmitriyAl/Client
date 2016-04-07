@@ -1,4 +1,4 @@
-package main.view;
+package main.view.painters;
 
 /**
  * @author Dmitriy Albot
@@ -6,5 +6,6 @@ package main.view;
 public enum DrawingType {
     BY_DOTES,
     LINES,
-    BEZIER
+    BEZIER,
+    THIRD_ORDER_BEZIER
 }

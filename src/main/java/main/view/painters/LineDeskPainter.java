@@ -1,6 +1,8 @@
-package main.view;
+package main.view.painters;
 
 import main.model.*;
+import main.view.ColorLibrary;
+import main.view.NoSuchColorInLibraryException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,10 +12,8 @@ import java.util.*;
  * @author Dmitriy Albot
  */
 public class LineDeskPainter implements DeskPainter {
-    private ColorLibrary colorLibrary;
 
     public LineDeskPainter() {
-        colorLibrary = new ColorLibrary();
     }
 
     @Override
@@ -23,7 +23,7 @@ public class LineDeskPainter implements DeskPainter {
         Command command = commands.peekLast();
         Color color;
         try {
-            color = colorLibrary.getColor(command.getPoint().getColor());
+            color = ColorLibrary.getColor(command.getPoint().getColor());
         } catch (NoSuchColorInLibraryException e) {
             color = new Color(0, 0, 0);
         }

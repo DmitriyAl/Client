@@ -3,6 +3,7 @@ package main.view;
 import main.model.Command;
 import main.model.MACCommandPointParser;
 import main.model.Point;
+import main.view.painters.BezierDeskPainter;
 import org.junit.Assert;
 import org.junit.Test;
 

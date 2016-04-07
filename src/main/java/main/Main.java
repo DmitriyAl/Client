@@ -5,9 +5,7 @@ import main.controller.IController;
 import main.model.MACCommandPointParser;
 import main.model.Model;
 import main.model.Parser;
-import main.view.DotToDotDeskPainter;
 import main.view.IView;
-import main.view.DeskPainter;
 import main.view.View;
 
 /**

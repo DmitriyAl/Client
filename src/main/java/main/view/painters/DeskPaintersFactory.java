@@ -1,4 +1,6 @@
-package main.view;
+package main.view.painters;
+
+import main.view.NoSuchPainterException;
 
 /**
  * @author Dmitriy Albot

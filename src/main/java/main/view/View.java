@@ -2,6 +2,9 @@ package main.view;
 
 import main.controller.IController;
 import main.model.*;
+import main.view.painters.DeskPainter;
+import main.view.painters.DeskPaintersFactory;
+import main.view.painters.DrawingType;
 
 import javax.swing.*;
 import java.awt.*;
