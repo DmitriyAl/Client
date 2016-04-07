@@ -11,7 +11,7 @@ public class DeskPaintersFactory {
             case BY_DOTES:
                 return new DotToDotDeskPainter();
             case BEZIER:
-                return new BezierDeskPainter();
+                return new ImprovedBezierDeckPainter();
             case LINES:
                 return new LineDeskPainter();
             default:

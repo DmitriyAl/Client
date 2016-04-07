@@ -21,12 +21,14 @@ public class Model implements IModel {
     private final Object lock = new Object();
     private volatile boolean isPaused;
     private ServerStatus status;
+    private int maxAttenptToConnect;
 
     public Model() {
         this.status = ServerStatus.SERVER_IS_UNAVAILABLE;
         graphicsObservers = new ArrayList<>();
         modelObservers = new ArrayList<>();
         commandPool = new LinkedList<>();
+        maxAttenptToConnect = 5;
     }
 
     public Model(Parser parser) {
@@ -87,7 +89,7 @@ public class Model implements IModel {
 
     private void startReceiveingMessage() {
         int attempt = 0;
-        while (attempt < 5) {
+        while (attempt < maxAttenptToConnect) {
             synchronized (lock) {
                 if (isPaused) {
                     try {
@@ -99,20 +101,20 @@ public class Model implements IModel {
             }
             String textCommand = null;
             try {
-                textCommand = bufferedReader.readLine();
+                textCommand = bufferedReader.readLine(); //todo waiting time
             } catch (IOException e) {
                 System.out.println("Connection reset"); //todo delete
                 attempt++;
                 continue;
 //                e.printStackTrace();
             }
-            attempt = 0;
             try {
                 Command currentCommand = parser.parseCommand(textCommand);
                 commandPool.add(currentCommand);
                 notifyGraphicsObservers();
                 System.out.println(textCommand);
             } catch (WrongParserCommandException e) {
+                attempt++;
                 System.out.println("Incorrect command"); //todo delete
             }
         }

@@ -6,23 +6,47 @@ import java.math.BigInteger;
  * @author Dmitriy Albot
  */
 public class BinomialCoefficientCalculator {
-    private static BigInteger[][] coefs;
+    private static BigInteger[][] bigIntCoefs;
+    private static long[][] longCoefs;
+    private static int maxLongCoef = 66;
+    private static int maxBigIntCoef = 200;
 
     static {
-        init(200);
+        initBigInt(maxBigIntCoef);
+        initFloat(maxLongCoef);
     }
 
-    private static void init(int maxN) {
-        int maxn = maxN;
-        coefs = new BigInteger[maxn + 1][maxn + 1];
-        for (int n = 0; n <= maxn; ++n) {
-            coefs[n][0] = coefs[n][n] = new BigInteger("1");
+    public static int getMaxLongCoef() {
+        return maxLongCoef;
+    }
+
+    public static int getMaxBigIntCoef() {
+        return maxBigIntCoef;
+    }
+
+    private static void initBigInt(int maxN) {
+        bigIntCoefs = new BigInteger[maxN + 1][maxN + 1];
+        for (int n = 0; n <= maxN; ++n) {
+            bigIntCoefs[n][0] = bigIntCoefs[n][n] = new BigInteger("1");
             for (int k = 1; k < n; ++k)
-                coefs[n][k] = coefs[n - 1][k - 1].add(coefs[n - 1][k]);
+                bigIntCoefs[n][k] = bigIntCoefs[n - 1][k - 1].add(bigIntCoefs[n - 1][k]);
         }
     }
 
-    public static BigInteger getCoef(int n, int k) {
-        return coefs[n][k];
+    private static void initFloat(int maxN) {
+        longCoefs = new long[maxN + 1][maxN + 1];
+        for (int n = 0; n <= maxN; ++n) {
+            longCoefs[n][0] = longCoefs[n][n] = 1;
+            for (int k = 1; k < n; ++k)
+                longCoefs[n][k] = longCoefs[n - 1][k - 1] + longCoefs[n - 1][k];
+        }
+    }
+
+    public static BigInteger getBigIntCoef(int n, int k) {
+        return bigIntCoefs[n][k];
+    }
+
+    public static long getLongCoef(int n, int k) {
+        return longCoefs[n][k];
     }
 }
