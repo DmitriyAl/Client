@@ -4,8 +4,6 @@ import main.model.*;
 import main.model.Point;
 import main.view.BinomialCoefficientCalculator;
 
-import javax.swing.*;
-import java.awt.*;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.*;
@@ -13,28 +11,24 @@ import java.util.*;
 /**
  * @author Dmitriy Albot
  */
-public class ImprovedBezierDeckPainter implements DeskPainter {
+public class BezierPointCalculator {
     private List<Command> currentCommands;
     private Deque<Command> transformedPoints;
     private Deque<Deque<Command>> picture;
     private float accuracy;
-    private final Object lock = new Object();
 
-    public ImprovedBezierDeckPainter(int accuracy) {
+    public BezierPointCalculator(int accuracy) {
         this.accuracy = accuracy;
-    }
-
-    public ImprovedBezierDeckPainter() {
-        this(1);
         currentCommands = new LinkedList<>();
         transformedPoints = new LinkedList<>();
         picture = new LinkedList<>();
     }
 
-    @Override
-    public Graphics draw(JPanel panel, Deque<Command> commands) {
-        Graphics graphics = panel.getGraphics();
-        Graphics2D graphics2D = (Graphics2D) graphics;
+    public Deque<Deque<Command>> getPicture() {
+        return picture;
+    }
+
+    public Deque<Command> transformToBezierPoints(Deque<Command> commands) {
         Command currentCommand = commands.peekLast();
         if (currentCommand.getType() == CommandType.START || commands.size() == 1) {
             saveTransformedPoints();
@@ -42,8 +36,7 @@ public class ImprovedBezierDeckPainter implements DeskPainter {
         }
         currentCommands.add(currentCommand);
         transformToBezierPoints();
-        new LineDeskPainter().draw(panel, transformedPoints);
-        return graphics2D;
+        return transformedPoints;
     }
 
     private void saveTransformedPoints() {
@@ -52,7 +45,7 @@ public class ImprovedBezierDeckPainter implements DeskPainter {
         }
     }
 
-    public void transformToBezierPoints() {
+    private void transformToBezierPoints() {
         int size = currentCommands.size();
         if (size == 1) {
             transformedPoints.add(new Command("", CommandType.START, currentCommands.get(0).getPoint()));
