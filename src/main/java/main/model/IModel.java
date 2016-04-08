@@ -22,6 +22,10 @@ public interface IModel {
 
     void resumeConnection();
 
+    void setHost(String host);
+
+    void setPort(int port);
+
     void setParser(Parser parser);
 
     ServerStatus getServerStatus();

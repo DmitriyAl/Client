@@ -107,4 +107,9 @@ public class BezierPointCalculator {
         }
         return new Command("", CommandType.MOVE, new Point(xCoord, yCoord, color));
     }
+
+    public void clearScreen() {
+        picture = new LinkedList<>();
+        currentCommands = new LinkedList<>();
+    }
 }

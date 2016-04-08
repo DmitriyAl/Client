@@ -12,4 +12,6 @@ import java.util.*;
  */
 public interface DeskPainter {
     void draw(JPanel desk,Deque<Command> commands);
+
+    void clearScreen();
 }

@@ -10,8 +10,8 @@ import java.util.*;
  * @author Dmitriy Albot
  */
 public class Model implements IModel {
-    public static final String HOST = "127.0.0.1";
-    public static final int PORT = 29228;
+    private String host;
+    private int port;
     private Parser parser;
     private List<GraphicsObserver> graphicsObservers;
     private List<ModelObserver> modelObservers;
@@ -75,7 +75,7 @@ public class Model implements IModel {
 
     private boolean establishConnection() {
         try {
-            socket = new Socket(HOST, PORT);
+            socket = new Socket(host, port);
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             status = ServerStatus.SERVER_IS_AVAILABLE;
             notifyModelObservers();
@@ -139,6 +139,16 @@ public class Model implements IModel {
             isPaused = false;
             lock.notifyAll();
         }
+    }
+
+    @Override
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    @Override
+    public void setPort(int port) {
+        this.port = port;
     }
 
     @Override

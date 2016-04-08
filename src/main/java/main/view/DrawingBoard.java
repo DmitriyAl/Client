@@ -39,8 +39,8 @@ public class DrawingBoard extends JPanel {
                 for (int i = 0; i < savedPictures.size(); i++) {
                     draw(g, savedPictures.get(i));
                 }
-                draw(g, currentDrawingPicture);
             }
+            draw(g, currentDrawingPicture);
         }
     }
 

@@ -45,4 +45,9 @@ public class LineDeskPainter implements DeskPainter {
         }
 //        return g2d;
     }
+
+    @Override
+    public void clearScreen() {
+
+    }
 }

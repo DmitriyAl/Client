@@ -9,4 +9,5 @@ import main.model.Command;
 public interface IView {
     void setController(IController controller);
 
+    void clearScreen();
 }
