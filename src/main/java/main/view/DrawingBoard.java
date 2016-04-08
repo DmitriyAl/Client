@@ -14,19 +14,21 @@ import java.util.List;
  * @author Dmitriy Albot
  */
 public class DrawingBoard extends JPanel {
-    private List<List<Command>> savedPictures;
-    private List<Command> currentDrawingPicture;
+    private List<List<Point>> savedPictures;
+    private List<Point> currentDrawingPicture;
+    private Color defaultColour;
 
     public DrawingBoard() {
+        defaultColour = new Color(127, 127, 127);
         savedPictures = new ArrayList<>();
         currentDrawingPicture = new ArrayList<>();
     }
 
-    public void setSavedPictures(List<List<Command>> savedPictures) {
+    public void setSavedPictures(List<List<Point>> savedPictures) {
         this.savedPictures = savedPictures;
     }
 
-    public void setCurrentDrawingPicture(List<Command> currentDrawingPicture) {
+    public void setCurrentDrawingPicture(List<Point> currentDrawingPicture) {
         this.currentDrawingPicture = currentDrawingPicture;
     }
 
@@ -44,19 +46,19 @@ public class DrawingBoard extends JPanel {
         }
     }
 
-    private void draw(final Graphics graphics, List<Command> picture) {
-        Command command = picture.get(0); //todo check last or first
-        Color color;
-        try {
-            color = ColorLibrary.getColor(command.getPoint().getColor());
-        } catch (NoSuchColorInLibraryException e) {
-            color = new Color(0, 0, 0);
-        }
-        graphics.setColor(color);
+    private void draw(final Graphics graphics, List<Point> picture) {
         for (int i = 0; i < picture.size() - 1; i++) {
-            Point origin = picture.get(i).getPoint();
-            Point next = picture.get(i + 1).getPoint();
-            if (picture.get(i + 1).getType() == CommandType.START) {
+            Point point = picture.get(i); //todo check last or first
+            Color color;
+            try {
+                color = ColorLibrary.getColor(point.getColor());
+            } catch (NoSuchColorInLibraryException e) {
+                color = defaultColour;
+            }
+            graphics.setColor(color);
+            Point origin = picture.get(i);
+            Point next = picture.get(i + 1);
+            if (picture.get(i + 1).getCommand() == CommandType.START) {
                 break;
             }
             int x1 = ((int) (origin.getX() * getWidth()));

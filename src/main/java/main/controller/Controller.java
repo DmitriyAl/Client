@@ -97,4 +97,15 @@ public class Controller implements IController {
         });
         clearScreen.start();
     }
+
+    @Override
+    public void stopConnection() {
+        Thread stopConnectionThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                model.stopConnection();
+            }
+        });
+        stopConnectionThread.start();
+    }
 }

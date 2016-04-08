@@ -13,12 +13,11 @@ import java.util.*;
  */
 public class BezierPointCalculator {
     private List<Command> currentCommands;
-    private List<Command> transformedPoints;
-    private List<List<Command>> picture;
+    private List<Point> transformedPoints;
+    private List<List<Point>> picture;
     private float accuracy;
 
     public BezierPointCalculator() {
-        accuracy = 100;
         currentCommands = new LinkedList<>();
         transformedPoints = new LinkedList<>();
         picture = new LinkedList<>();
@@ -28,11 +27,11 @@ public class BezierPointCalculator {
         this.accuracy = accuracy;
     }
 
-    public List<List<Command>> getPicture() {
+    public List<List<Point>> getPicture() {
         return picture;
     }
 
-    public List<Command> transformToBezierPoints(Deque<Command> commands) {
+    public List<Point> transformToBezierPoints(Deque<Command> commands) {
         Command currentCommand = commands.peekLast();
         if (currentCommand.getType() == CommandType.START || commands.size() == 1) {
             saveTransformedPoints();
@@ -52,7 +51,9 @@ public class BezierPointCalculator {
     private void transformToBezierPoints() {
         int size = currentCommands.size();
         if (size == 1) {
-            transformedPoints.add(new Command("", CommandType.START, currentCommands.get(0).getPoint()));
+            Point point = currentCommands.get(0).getPoint();
+            point.setCommand(CommandType.START);
+            transformedPoints.add(point);
             return;
         }
         if (size <= BinomialCoefficientCalculator.getMaxLongCoef()) {
@@ -78,12 +79,12 @@ public class BezierPointCalculator {
                 xCoord += BinomialCoefficientCalculator.getLongCoef(size - 1, j) * currentX * tInPower * oneMinusTInPower;
                 yCoord += BinomialCoefficientCalculator.getLongCoef(size - 1, j) * currentY * tInPower * oneMinusTInPower;
             }
-            Command currentCommand = formACommand(transformedPoints, xCoord, yCoord, point.getColor());
-            transformedPoints.add(currentCommand);
+            Point bezierPoint = formAnewPoint(transformedPoints, xCoord, yCoord, point);
+            transformedPoints.add(bezierPoint);
         }
     }
 
-    private List<Command> slowTransform() {
+    private void slowTransform() {
         int size = currentCommands.size();
         transformedPoints = new LinkedList<>();
         for (float t = 0; t <= 1; t += 1f / (accuracy * size)) {
@@ -99,17 +100,16 @@ public class BezierPointCalculator {
                 xCoord += Float.valueOf(String.valueOf(BinomialCoefficientCalculator.getBigIntCoef(size-1, j).multiply(new BigDecimal(currentX * tInPower * oneMinusTInPower))));
                 yCoord += Float.valueOf(String.valueOf(BinomialCoefficientCalculator.getBigIntCoef(size-1, j).multiply(new BigDecimal(currentY * tInPower * oneMinusTInPower))));
             }
-            Command currentCommand = formACommand(transformedPoints, xCoord, yCoord, point.getColor());
-            transformedPoints.add(currentCommand);
+            Point bezierPoint = formAnewPoint(transformedPoints, xCoord, yCoord, point);
+            transformedPoints.add(bezierPoint);
         }
-        return transformedPoints;
     }
 
-    private Command formACommand(List<Command> commands, float xCoord, float yCoord, int color) {
-        if (commands.size() == 0) {
-            return new Command("", CommandType.START, new Point(xCoord, yCoord, color));
+    private Point formAnewPoint(List<Point> transformedPoints, float xCoord, float yCoord, Point point) {
+        if (transformedPoints.size() == 0) {
+            return new Point(xCoord, yCoord, point.getColor(), CommandType.START);
         }
-        return new Command("", CommandType.MOVE, new Point(xCoord, yCoord, color));
+        return new Point(xCoord, yCoord, point.getColor(), CommandType.MOVE);
     }
 
     public void clearScreen() {

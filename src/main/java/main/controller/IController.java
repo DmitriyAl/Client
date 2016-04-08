@@ -13,4 +13,6 @@ public interface IController {
     boolean setPort(String text);
 
     void clearScreen();
+
+    void stopConnection();
 }

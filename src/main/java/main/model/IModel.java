@@ -26,7 +26,7 @@ public interface IModel {
 
     void setPort(int port);
 
-    void setParser(Parser parser);
-
     ServerStatus getServerStatus();
+
+    void stopConnection();
 }

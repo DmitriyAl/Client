@@ -26,9 +26,9 @@ public class BezierDeskPainter implements DeskPainter {
 
     @Override
     public void draw(JPanel desk, Deque<Command> incomingCommands) {
-        List<Command> bezierCommands = calculator.transformToBezierPoints(incomingCommands);
+        List<Point> bezierPoints = calculator.transformToBezierPoints(incomingCommands);
         DrawingBoard drawingBoard = (DrawingBoard) desk;
-        drawingBoard.setCurrentDrawingPicture(bezierCommands);
+        drawingBoard.setCurrentDrawingPicture(bezierPoints);
         drawingBoard.setSavedPictures(calculator.getPicture());
     }
 

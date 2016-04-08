@@ -17,18 +17,18 @@ public class Model implements IModel {
     private List<ModelObserver> modelObservers;
     private Deque<Command> commandPool;
     private BufferedReader bufferedReader;
-    private Socket socket;
+    private volatile Socket socket;
     private final Object lock = new Object();
     private volatile boolean isPaused;
     private ServerStatus status;
-    private int maxAttenptToConnect;
+    private int maxAttemptToConnect;
 
     public Model() {
         this.status = ServerStatus.SERVER_IS_UNAVAILABLE;
         graphicsObservers = new ArrayList<>();
         modelObservers = new ArrayList<>();
         commandPool = new LinkedList<>();
-        maxAttenptToConnect = 5;
+        maxAttemptToConnect = 5;
     }
 
     public Model(Parser parser) {
@@ -89,7 +89,7 @@ public class Model implements IModel {
 
     private void startReceiveingMessage() {
         int attempt = 0;
-        while (attempt < maxAttenptToConnect) {
+        while (attempt < maxAttemptToConnect) {
             synchronized (lock) {
                 if (isPaused) {
                     try {
@@ -152,12 +152,18 @@ public class Model implements IModel {
     }
 
     @Override
-    public void setParser(Parser parser) {
-        this.parser = parser;
+    public ServerStatus getServerStatus() {
+        return status;
     }
 
     @Override
-    public ServerStatus getServerStatus() {
-        return status;
+    public void stopConnection() {
+        try {
+            socket.getInputStream().close();
+            bufferedReader.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

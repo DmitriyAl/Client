@@ -24,7 +24,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private JButton stopConnection;
     private JButton clearScreen;
     private JRadioButton pauseConnection;
-    private JSlider accuracy;
+    private JSlider accuracySlider;
     private JTextField host;
     private JTextField port;
     private JTextField currentAccuracy;
@@ -33,6 +33,8 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private JLabel bezierAccuracyDescription;
     private JLabel status;
     private JComboBox<DrawingType> drawingTypeJComboBox;
+    private Color errorColor;
+    private Color backGround;
     private DeskPainter deskPainter;
     private static View instance;
     private ServerStatus serverStatus;
@@ -41,6 +43,8 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private View(IModel model) {
         this.model = model;
         serverStatus = ServerStatus.SERVER_IS_UNAVAILABLE;
+        errorColor = new Color(255, 140, 140);
+        backGround = new Color(255, 255, 255);
         model.addGraphicsObserver(this);
         model.addModelObserver(this);
         initGraphics();
@@ -62,7 +66,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
         desk = new DrawingBoard();
-        desk.setBackground(new Color(255, 255, 255));
+        desk.setBackground(backGround);
         startConnection = new JButton("Start connection");
         stopConnection = new JButton("Stop connection");
         stopConnection.setEnabled(false);
@@ -70,12 +74,12 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         clearScreen.setEnabled(false);
         host = new JTextField("127.0.0.1");
         port = new JTextField("29228");
-        accuracy = new JSlider(SwingConstants.HORIZONTAL, 10, 200, 100);
-        accuracy.setPreferredSize(new Dimension(50, 20));
-        accuracy.setPaintTicks(true);
-        accuracy.setPaintTrack(true);
-        accuracy.setSnapToTicks(true);
-        currentAccuracy = new JTextField(String.valueOf(accuracy.getValue()));
+        accuracySlider = new JSlider(SwingConstants.HORIZONTAL, 10, 200, 100);
+        accuracySlider.setPreferredSize(new Dimension(50, 20));
+        accuracySlider.setPaintTicks(true);
+        accuracySlider.setPaintTrack(true);
+        accuracySlider.setSnapToTicks(true);
+        currentAccuracy = new JTextField(String.valueOf(accuracySlider.getValue()));
         pauseConnection = new JRadioButton("Pause connection");
         pauseConnection.setEnabled(false);
         status = new JLabel();
@@ -87,7 +91,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                 .addComponent(drawingTypeJComboBox)
                 .addComponent(bezierAccuracyDescription)
                 .addGroup(layout.createSequentialGroup()
-                        .addComponent(accuracy)
+                        .addComponent(accuracySlider)
                         .addComponent(currentAccuracy))
                 .addComponent(hostLabel)
                 .addComponent(host)
@@ -101,7 +105,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                 .addComponent(drawingTypeJComboBox)
                 .addComponent(bezierAccuracyDescription)
                 .addGroup(layout.createParallelGroup()
-                        .addComponent(accuracy)
+                        .addComponent(accuracySlider)
                         .addComponent(currentAccuracy))
                 .addComponent(hostLabel)
                 .addComponent(host)
@@ -125,24 +129,25 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         startConnection.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                host.setBackground(new Color(255, 255, 255));
-                port.setBackground(new Color(255, 255, 255));
+//                controller.clearScreen();
+                host.setBackground(backGround);
+                port.setBackground(backGround);
                 boolean isCorrectHost = controller.setHost(host.getText());
                 boolean isCorrectPort = controller.setPort(port.getText());
                 if (!isCorrectHost) {
-                    host.setBackground(new Color(255, 140, 140));
+                    host.setBackground(errorColor);
                     status.setText("Incorrect host");
                     return;
                 }
                 if (!isCorrectPort) {
-                    port.setBackground(new Color(255, 140, 140));
+                    port.setBackground(errorColor);
                     status.setText("Incorrect port");
                     return;
                 }
                 controller.startConnection();
                 deskPainter = DeskPaintersFactory.getPainter((DrawingType) drawingTypeJComboBox.getSelectedItem());
                 if (drawingTypeJComboBox.getSelectedItem() == DrawingType.BEZIER) {
-                    ((BezierDeskPainter) deskPainter).setAccuracy(accuracy.getValue());
+                    ((BezierDeskPainter) deskPainter).setAccuracy(accuracySlider.getValue());
                 }
             }
         });
@@ -156,11 +161,11 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                 }
             }
         });
-        accuracy.addChangeListener(new ChangeListener() {
+        accuracySlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 status.setText("");
-                currentAccuracy.setText(String.valueOf(accuracy.getValue()));
+                currentAccuracy.setText(String.valueOf(accuracySlider.getValue()));
             }
         });
         currentAccuracy.addActionListener(new ActionListener() {
@@ -171,8 +176,9 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                     if (value > 200 || value < 10) {
                         throw new IncorrectBezierAccuracyValue("Incorrect value");
                     }
-                    accuracy.setValue(value);
+                    accuracySlider.setValue(value);
                 } catch (RuntimeException e1) {
+                    currentAccuracy.setText(String.valueOf(accuracySlider.getValue()));
                     status.setText("Incorrect number for accuracy");
                 }
             }
@@ -183,12 +189,18 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                 controller.clearScreen();
             }
         });
+        stopConnection.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.stopConnection();
+            }
+        });
     }
 
     private void isSuccessfulConnection(boolean b) {
         startConnection.setEnabled(!b);
         drawingTypeJComboBox.setEnabled(!b);
-        accuracy.setEnabled(!b);
+        accuracySlider.setEnabled(!b);
         currentAccuracy.setEnabled(!b);
         port.setEnabled(!b);
         host.setEnabled(!b);
