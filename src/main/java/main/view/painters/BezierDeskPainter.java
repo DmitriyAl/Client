@@ -17,7 +17,7 @@ public class BezierDeskPainter implements DeskPainter {
     private BezierPointCalculator calculator;
 
     public BezierDeskPainter() {
-        calculator = new BezierPointCalculator(100);
+        calculator = new BezierPointCalculator(200);
     }
 
     public BezierDeskPainter(BezierPointCalculator calculator) {

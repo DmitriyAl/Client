@@ -103,7 +103,8 @@ public class Model implements IModel {
             try {
                 textCommand = bufferedReader.readLine(); //todo waiting time
             } catch (IOException e) {
-                System.out.println("Connection reset"); //todo delete
+                status = ServerStatus.SERVER_IS_UNAVAILABLE;//todo logging
+                notifyModelObservers();
                 attempt++;
                 continue;
 //                e.printStackTrace();

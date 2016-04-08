@@ -36,11 +36,11 @@ public class DrawingBoard extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
         if (currentDrawingPicture.size() != 0 || savedPictures.size() != 0) {
             if (savedPictures.size() > 0) {
-                for (List<Command> next : savedPictures) {
-                    draw(g, next);
+                for (int i = 0; i < savedPictures.size(); i++) {
+                    draw(g, savedPictures.get(i));
                 }
+                draw(g, currentDrawingPicture);
             }
-            draw(g, currentDrawingPicture);
         }
     }
 
@@ -53,10 +53,10 @@ public class DrawingBoard extends JPanel {
             color = new Color(0, 0, 0);
         }
         graphics.setColor(color);
-        for (int i = 0; i < picture.size()-1; i++) {
+        for (int i = 0; i < picture.size() - 1; i++) {
             Point origin = picture.get(i).getPoint();
-            Point next = picture.get(i+1).getPoint();
-            if (picture.get(i+1).getType() == CommandType.START) {
+            Point next = picture.get(i + 1).getPoint();
+            if (picture.get(i + 1).getType() == CommandType.START) {
                 break;
             }
             int x1 = ((int) (origin.getX() * getWidth()));

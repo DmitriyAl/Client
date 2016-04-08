@@ -21,7 +21,12 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private JPanel desk;
     private JPanel configPanel;
     private JButton startConnection;
+    private JButton stopConnection;
+    private JButton clearScreen;
     private JRadioButton pauseConnection;
+    private JSlider accuracy;
+    private JTextField host;
+    private JTextField port;
     private JLabel status;
     private JComboBox<DrawingType> drawingTypeJComboBox;
     private DeskPainter deskPainter;
