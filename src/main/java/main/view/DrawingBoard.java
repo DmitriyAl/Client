@@ -8,27 +8,25 @@ import main.view.painters.exceptions.NoSuchColorInLibraryException;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
-import java.util.LinkedList;
 
 /**
  * @author Dmitriy Albot
  */
 public class DrawingBoard extends JPanel {
-    private List<Deque<Command>> savedPictures;
-    private Deque<Command> currentDrawingPicture;
+    private List<List<Command>> savedPictures;
+    private List<Command> currentDrawingPicture;
 
     public DrawingBoard() {
         savedPictures = new ArrayList<>();
-        currentDrawingPicture = new LinkedList<>();
+        currentDrawingPicture = new ArrayList<>();
     }
 
-    public void setSavedPictures(List<Deque<Command>> savedPictures) {
+    public void setSavedPictures(List<List<Command>> savedPictures) {
         this.savedPictures = savedPictures;
     }
 
-    public void setCurrentDrawingPicture(Deque<Command> currentDrawingPicture) {
+    public void setCurrentDrawingPicture(List<Command> currentDrawingPicture) {
         this.currentDrawingPicture = currentDrawingPicture;
     }
 
@@ -38,7 +36,7 @@ public class DrawingBoard extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
         if (currentDrawingPicture.size() != 0 || savedPictures.size() != 0) {
             if (savedPictures.size() > 0) {
-                for (Deque<Command> next : savedPictures) {
+                for (List<Command> next : savedPictures) {
                     draw(g, next);
                 }
             }
@@ -46,8 +44,8 @@ public class DrawingBoard extends JPanel {
         }
     }
 
-    private void draw(final Graphics graphics, Deque<Command> picture) {
-        Command command = picture.peekFirst(); //todo check last or first
+    private void draw(final Graphics graphics, List<Command> picture) {
+        Command command = picture.get(0); //todo check last or first
         Color color;
         try {
             color = ColorLibrary.getColor(command.getPoint().getColor());
@@ -55,10 +53,10 @@ public class DrawingBoard extends JPanel {
             color = new Color(0, 0, 0);
         }
         graphics.setColor(color);
-        while (picture.size() > 1) {
-            Point origin = picture.pollFirst().getPoint();
-            Point next = picture.peekFirst().getPoint();
-            if (picture.peekFirst().getType() == CommandType.START) {
+        for (int i = 0; i < picture.size()-1; i++) {
+            Point origin = picture.get(i).getPoint();
+            Point next = picture.get(i+1).getPoint();
+            if (picture.get(i+1).getType() == CommandType.START) {
                 break;
             }
             int x1 = ((int) (origin.getX() * getWidth()));

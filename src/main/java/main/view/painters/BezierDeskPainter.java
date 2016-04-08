@@ -8,6 +8,7 @@ import main.view.painters.exceptions.NoSuchColorInLibraryException;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * @author Albot Dmitriy
@@ -25,7 +26,7 @@ public class BezierDeskPainter implements DeskPainter {
 
     @Override
     public void draw(JPanel desk, Deque<Command> incomingCommands) {
-        Deque<Command> bezierCommands = calculator.transformToBezierPoints(incomingCommands);
+        List<Command> bezierCommands = calculator.transformToBezierPoints(incomingCommands);
         DrawingBoard drawingBoard = (DrawingBoard) desk;
         drawingBoard.setCurrentDrawingPicture(bezierCommands);
         drawingBoard.setSavedPictures(calculator.getPicture());

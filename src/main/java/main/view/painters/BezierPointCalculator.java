@@ -13,8 +13,8 @@ import java.util.*;
  */
 public class BezierPointCalculator {
     private List<Command> currentCommands;
-    private Deque<Command> transformedPoints;
-    private List<Deque<Command>> picture;
+    private List<Command> transformedPoints;
+    private List<List<Command>> picture;
     private float accuracy;
 
     public BezierPointCalculator(int accuracy) {
@@ -24,11 +24,11 @@ public class BezierPointCalculator {
         picture = new LinkedList<>();
     }
 
-    public List<Deque<Command>> getPicture() {
+    public List<List<Command>> getPicture() {
         return picture;
     }
 
-    public Deque<Command> transformToBezierPoints(Deque<Command> commands) {
+    public List<Command> transformToBezierPoints(Deque<Command> commands) {
         Command currentCommand = commands.peekLast();
         if (currentCommand.getType() == CommandType.START || commands.size() == 1) {
             saveTransformedPoints();
@@ -79,7 +79,7 @@ public class BezierPointCalculator {
         }
     }
 
-    private Deque<Command> slowTransform() {
+    private List<Command> slowTransform() {
         int size = currentCommands.size();
         transformedPoints = new LinkedList<>();
         for (float t = 0; t <= 1; t += 1f / (accuracy * size)) {
@@ -101,7 +101,7 @@ public class BezierPointCalculator {
         return transformedPoints;
     }
 
-    private Command formACommand(Deque<Command> commands, float xCoord, float yCoord, int color) {
+    private Command formACommand(List<Command> commands, float xCoord, float yCoord, int color) {
         if (commands.size() == 0) {
             return new Command("", CommandType.START, new Point(xCoord, yCoord, color));
         }
