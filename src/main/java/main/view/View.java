@@ -186,6 +186,9 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private void startSettings() {
         host.setBackground(backGround);
         port.setBackground(backGround);
+        if (!accuracySettings()) {
+            return;
+        }
         boolean isCorrectHost = controller.setHost(host.getText());
         boolean isCorrectPort = controller.setPort(port.getText());
         if (!isCorrectHost) {
@@ -205,16 +208,18 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         }
     }
 
-    private void accuracySettings() {
+    private boolean accuracySettings() {
         try {
             int value = Integer.parseInt(currentAccuracy.getText());
-            if (value > 200 || value < 10) {
+            if (value > 200 || value < 1) {
                 throw new IncorrectBezierAccuracyValue("Incorrect value");
             }
             accuracySlider.setValue(value);
+            return true;
         } catch (RuntimeException e1) {
             currentAccuracy.setText(String.valueOf(accuracySlider.getValue()));
             status.setText("Incorrect number for accuracy");
+            return false;
         }
     }
 

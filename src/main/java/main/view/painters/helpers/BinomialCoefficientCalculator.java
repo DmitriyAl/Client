@@ -9,19 +9,16 @@ public class BinomialCoefficientCalculator {
     private static BigDecimal[][] bigIntCoefficients;
     private static long[][] longCoefficients;
     private static final int MAX_LONG_COEFFICIENT = 66;
-    private static int maxBigIntCoefficient = 200;
+    private static int maxBigIntCoefficient;
 
     static {
+        maxBigIntCoefficient = 200;
         initBigInt(maxBigIntCoefficient);
         initFloat(MAX_LONG_COEFFICIENT);
     }
 
     public static int getMaxLongCoefficient() {
         return MAX_LONG_COEFFICIENT;
-    }
-
-    public static int getMaxBigIntCoefficient() {
-        return maxBigIntCoefficient;
     }
 
     private static void initBigInt(int maxN) {
