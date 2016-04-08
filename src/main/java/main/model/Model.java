@@ -1,5 +1,8 @@
 package main.model;
 
+import main.model.parsers.Parser;
+import main.model.parsers.exceptions.WrongParserCommandException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

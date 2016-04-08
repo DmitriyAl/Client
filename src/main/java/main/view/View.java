@@ -3,6 +3,8 @@ package main.view;
 import main.controller.IController;
 import main.model.*;
 import main.view.painters.*;
+import main.view.painters.exceptions.IncorrectBezierAccuracyValue;
+import main.view.painters.PointCalculatorsFactory;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -74,7 +76,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         clearScreen.setEnabled(false);
         host = new JTextField("127.0.0.1");
         port = new JTextField("29228");
-        accuracySlider = new JSlider(SwingConstants.HORIZONTAL, 10, 200, 100);
+        accuracySlider = new JSlider(SwingConstants.HORIZONTAL, 1, 200, 100);
         accuracySlider.setPreferredSize(new Dimension(50, 20));
         accuracySlider.setPaintTicks(true);
         accuracySlider.setPaintTrack(true);
@@ -145,9 +147,10 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                     return;
                 }
                 controller.startConnection();
-                deskPainter = DeskPaintersFactory.getPainter((DrawingType) drawingTypeJComboBox.getSelectedItem());
+//                deskPainter = PointCalculatorsFactory.getPainter((DrawingType) drawingTypeJComboBox.getSelectedItem());
+                deskPainter = new DeskPainter(PointCalculatorsFactory.getPainter((DrawingType)drawingTypeJComboBox.getSelectedItem()));
                 if (drawingTypeJComboBox.getSelectedItem() == DrawingType.BEZIER) {
-                    ((BezierDeskPainter) deskPainter).setAccuracy(accuracySlider.getValue());
+                    deskPainter.setAccuracy(accuracySlider.getValue());
                 }
             }
         });
@@ -164,7 +167,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         accuracySlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                status.setText("");
+                status.setText("Bezier accuracy changed at " + accuracySlider.getValue());
                 currentAccuracy.setText(String.valueOf(accuracySlider.getValue()));
             }
         });
@@ -193,6 +196,18 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.stopConnection();
+            }
+        });
+        drawingTypeJComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (drawingTypeJComboBox.getSelectedItem() != DrawingType.BEZIER) {
+                    accuracySlider.setEnabled(false);
+                    currentAccuracy.setEnabled(false);
+                } else {
+                    accuracySlider.setEnabled(true);
+                    currentAccuracy.setEnabled(true);
+                }
             }
         });
     }

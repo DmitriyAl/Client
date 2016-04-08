@@ -1,4 +1,7 @@
-package main.model;
+package main.model.parsers;
+
+import main.model.Command;
+import main.model.parsers.exceptions.WrongParserCommandException;
 
 /**
  * @author Dmitriy Albot

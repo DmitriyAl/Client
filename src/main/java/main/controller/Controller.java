@@ -1,5 +1,6 @@
 package main.controller;
 
+import main.controller.exceptions.InvalidHostException;
 import main.model.IModel;
 import main.view.IView;
 

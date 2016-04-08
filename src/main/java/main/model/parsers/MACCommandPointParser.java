@@ -1,4 +1,8 @@
-package main.model;
+package main.model.parsers;
+
+import main.model.*;
+import main.model.parsers.exceptions.WrongMACAddressException;
+import main.model.parsers.exceptions.WrongParserCommandException;
 
 import java.util.StringTokenizer;
 
@@ -7,7 +11,7 @@ import java.util.StringTokenizer;
  */
 public class MACCommandPointParser implements Parser {
     @Override
-    public Command parseCommand(String command) throws WrongParserCommandException{
+    public Command parseCommand(String command) throws WrongParserCommandException {
         StringTokenizer parser = new StringTokenizer(command, ";");
         if (parser.countTokens() != 5) {
             throw new WrongParserCommandException("Wrong command format");

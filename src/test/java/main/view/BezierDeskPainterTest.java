@@ -1,16 +1,5 @@
 package main.view;
 
-import main.model.Command;
-import main.model.MACCommandPointParser;
-import main.model.Point;
-import main.view.painters.BezierDeskPainter;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * @author Dmitriy Albot
  */
@@ -73,10 +62,10 @@ public class BezierDeskPainterTest {
 //        commands.add(parser.parseCommand("60:21:C0:2A:E0:33;move;0.673257;0.38544124;-16777216"));
 //        Deque<List<Command>> lists = painter.divideToDifferentFigures(commands);
 //        System.out.println(lists.size());
-//        Deque<Command> transformToBezierPoints = painter.transformToBezierPoints(lists);
-//        System.out.println(transformToBezierPoints.size());
-//        for (int i = 0; i < transformToBezierPoints.size(); i++) {
-//            System.out.println(transformToBezierPoints.pollLast());
+//        Deque<Command> transformToDrawingPoints = painter.transformToDrawingPoints(lists);
+//        System.out.println(transformToDrawingPoints.size());
+//        for (int i = 0; i < transformToDrawingPoints.size(); i++) {
+//            System.out.println(transformToDrawingPoints.pollLast());
 //        }
 //    }
 }
