@@ -31,7 +31,7 @@ public class Model implements IModel {
         graphicsObservers = new ArrayList<>();
         modelObservers = new ArrayList<>();
         commandPool = new LinkedList<>();
-        maxAttemptToConnect = 5;
+        maxAttemptToConnect = 5; //todo
     }
 
     public Model(Parser parser) {

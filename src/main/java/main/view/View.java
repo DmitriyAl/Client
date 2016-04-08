@@ -131,27 +131,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         startConnection.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                controller.clearScreen();
-                host.setBackground(backGround);
-                port.setBackground(backGround);
-                boolean isCorrectHost = controller.setHost(host.getText());
-                boolean isCorrectPort = controller.setPort(port.getText());
-                if (!isCorrectHost) {
-                    host.setBackground(errorColor);
-                    status.setText("Incorrect host");
-                    return;
-                }
-                if (!isCorrectPort) {
-                    port.setBackground(errorColor);
-                    status.setText("Incorrect port");
-                    return;
-                }
-                controller.startConnection();
-//                deskPainter = PointCalculatorsFactory.getPainter((DrawingType) drawingTypeJComboBox.getSelectedItem());
-                deskPainter = new DeskPainter(PointCalculatorsFactory.getPainter((DrawingType)drawingTypeJComboBox.getSelectedItem()));
-                if (drawingTypeJComboBox.getSelectedItem() == DrawingType.BEZIER) {
-                    deskPainter.setAccuracy(accuracySlider.getValue());
-                }
+                startSettings();
             }
         });
         pauseConnection.addActionListener(new ActionListener() {
@@ -174,16 +154,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         currentAccuracy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    int value = Integer.parseInt(currentAccuracy.getText());
-                    if (value > 200 || value < 10) {
-                        throw new IncorrectBezierAccuracyValue("Incorrect value");
-                    }
-                    accuracySlider.setValue(value);
-                } catch (RuntimeException e1) {
-                    currentAccuracy.setText(String.valueOf(accuracySlider.getValue()));
-                    status.setText("Incorrect number for accuracy");
-                }
+                accuracySettings();
             }
         });
         clearScreen.addActionListener(new ActionListener() {
@@ -210,6 +181,41 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                 }
             }
         });
+    }
+
+    private void startSettings() {
+        host.setBackground(backGround);
+        port.setBackground(backGround);
+        boolean isCorrectHost = controller.setHost(host.getText());
+        boolean isCorrectPort = controller.setPort(port.getText());
+        if (!isCorrectHost) {
+            host.setBackground(errorColor);
+            status.setText("Incorrect host");
+            return;
+        }
+        if (!isCorrectPort) {
+            port.setBackground(errorColor);
+            status.setText("Incorrect port");
+            return;
+        }
+        controller.startConnection();
+        deskPainter = new DeskPainter(PointCalculatorsFactory.getPainter((DrawingType)drawingTypeJComboBox.getSelectedItem()));
+        if (drawingTypeJComboBox.getSelectedItem() == DrawingType.BEZIER) {
+            deskPainter.setAccuracy(accuracySlider.getValue());
+        }
+    }
+
+    private void accuracySettings() {
+        try {
+            int value = Integer.parseInt(currentAccuracy.getText());
+            if (value > 200 || value < 10) {
+                throw new IncorrectBezierAccuracyValue("Incorrect value");
+            }
+            accuracySlider.setValue(value);
+        } catch (RuntimeException e1) {
+            currentAccuracy.setText(String.valueOf(accuracySlider.getValue()));
+            status.setText("Incorrect number for accuracy");
+        }
     }
 
     private void isSuccessfulConnection(boolean b) {
