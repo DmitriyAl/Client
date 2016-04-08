@@ -17,11 +17,15 @@ public class BezierPointCalculator {
     private List<List<Command>> picture;
     private float accuracy;
 
-    public BezierPointCalculator(int accuracy) {
-        this.accuracy = accuracy;
+    public BezierPointCalculator() {
+        accuracy = 100;
         currentCommands = new LinkedList<>();
         transformedPoints = new LinkedList<>();
         picture = new LinkedList<>();
+    }
+
+    public void setAccuracy(float accuracy) {
+        this.accuracy = accuracy;
     }
 
     public List<List<Command>> getPicture() {

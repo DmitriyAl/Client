@@ -2,9 +2,7 @@ package main.view;
 
 import main.controller.IController;
 import main.model.*;
-import main.view.painters.DeskPainter;
-import main.view.painters.DeskPaintersFactory;
-import main.view.painters.DrawingType;
+import main.view.painters.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -143,6 +141,9 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                 }
                 controller.startConnection();
                 deskPainter = DeskPaintersFactory.getPainter((DrawingType) drawingTypeJComboBox.getSelectedItem());
+                if (drawingTypeJComboBox.getSelectedItem() == DrawingType.BEZIER) {
+                    ((BezierDeskPainter) deskPainter).setAccuracy(accuracy.getValue());
+                }
             }
         });
         pauseConnection.addActionListener(new ActionListener() {

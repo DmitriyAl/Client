@@ -17,7 +17,7 @@ public class BezierDeskPainter implements DeskPainter {
     private BezierPointCalculator calculator;
 
     public BezierDeskPainter() {
-        calculator = new BezierPointCalculator(100);
+        calculator = new BezierPointCalculator();
     }
 
     public BezierDeskPainter(BezierPointCalculator calculator) {
@@ -35,5 +35,9 @@ public class BezierDeskPainter implements DeskPainter {
     @Override
     public void clearScreen() {
         calculator.clearScreen();
+    }
+
+    public void setAccuracy(int value) {
+        calculator.setAccuracy(value);
     }
 }
