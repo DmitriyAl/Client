@@ -2,6 +2,7 @@ package main.view.painters.point_calculators;
 
 import main.model.Command;
 import main.model.Point;
+import org.apache.log4j.Logger;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ public abstract class PointCalculator {
     protected List<Point> transformedPoints;
     protected List<List<Point>> picture;
     protected float accuracy;
+    public static Logger log = Logger.getLogger(PointCalculator.class);
 
     public PointCalculator() {
         currentCommands = new LinkedList<>();
@@ -35,5 +37,6 @@ public abstract class PointCalculator {
     public void clearScreen() {
         picture = new LinkedList<>();
         currentCommands = new LinkedList<>();
+        log.info("Screen cleared");
     }
 }

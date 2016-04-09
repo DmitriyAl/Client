@@ -3,6 +3,8 @@ package main.model.parsers;
 import main.model.*;
 import main.model.parsers.exceptions.WrongMACAddressException;
 import main.model.parsers.exceptions.WrongParserCommandException;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
 import java.util.StringTokenizer;
 
@@ -10,6 +12,8 @@ import java.util.StringTokenizer;
  * @author Dmitriy Albot
  */
 public class MACCommandPointParser implements Parser {
+    public static Logger log = Logger.getLogger(MACCommandPointParser.class);
+
     @Override
     public Command parseCommand(String command) throws WrongParserCommandException {
         StringTokenizer parser = new StringTokenizer(command, ";");
@@ -27,6 +31,8 @@ public class MACCommandPointParser implements Parser {
             return new Command(mac, commandType, point);
         } catch (NumberFormatException e) {
             throw new WrongParserCommandException("Wrong coordinates values");
+        } finally {
+            log.trace(command);
         }
     }
 
