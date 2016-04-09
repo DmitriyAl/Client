@@ -25,7 +25,7 @@ public class Model implements IModel {
     private final Object lock = new Object();
     private volatile boolean isPaused;
     private ServerStatus status;
-    public static Logger log = Logger.getLogger(Model.class);
+    private static Logger log = Logger.getLogger(Model.class);
 
 
     public Model() {

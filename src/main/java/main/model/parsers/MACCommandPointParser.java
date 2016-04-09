@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
  * @author Dmitriy Albot
  */
 public class MACCommandPointParser implements Parser {
-    public static Logger log = Logger.getLogger(MACCommandPointParser.class);
+    private static Logger log = Logger.getLogger(MACCommandPointParser.class);
 
     @Override
     public Command parseCommand(String command) throws WrongParserCommandException {
