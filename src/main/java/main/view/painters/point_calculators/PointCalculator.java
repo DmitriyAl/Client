@@ -32,11 +32,16 @@ public abstract class PointCalculator {
         return picture;
     }
 
+    public List<Point> getTransformedPoints() {
+        return transformedPoints;
+    }
+
     public abstract List<Point> transformToDrawingPoints(Deque<Command> commands);
 
     public void clearScreen() {
         picture = new LinkedList<>();
         currentCommands = new LinkedList<>();
+        transformedPoints = new LinkedList<>();
         log.info("Screen cleared");
     }
 }

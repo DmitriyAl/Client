@@ -26,6 +26,7 @@ public class Model implements IModel {
     private volatile boolean isPaused;
     private ServerStatus status;
     private static Logger log = Logger.getLogger(Model.class);
+    private volatile boolean isStopped;
 
 
     public Model() {
@@ -71,9 +72,19 @@ public class Model implements IModel {
 
     @Override
     public void startClient() {
-        boolean isConnectedToServer = establishConnection();
-        if (isConnectedToServer) {
-            startReceiveingMessage();
+        isStopped = false;
+        try {
+            boolean isConnectedToServer = establishConnection();
+            if (isConnectedToServer) {
+                startReceiveingMessage();
+            }
+        } finally {
+            try {
+                bufferedReader.close();
+                socket.close();
+            } catch (IOException e) {
+                log.error("Failure to close connection to server");
+            }
         }
     }
 
@@ -94,8 +105,7 @@ public class Model implements IModel {
     }
 
     private void startReceiveingMessage() {
-
-        while (true) {
+        while (!isStopped) {
             synchronized (lock) {
                 if (isPaused) {
                     try {
@@ -105,17 +115,16 @@ public class Model implements IModel {
                     }
                 }
             }
-            String textCommand = null;
+            String textCommand;
             try {
                 textCommand = bufferedReader.readLine();
             } catch (IOException e) {
                 status = ServerStatus.SERVER_IS_UNAVAILABLE;
-                log.warn("Failed to read the command from the server");
                 notifyModelObservers();
                 break;
             }
             try {
-                if (textCommand != null) {
+                if (!textCommand.isEmpty()) {
                     Command currentCommand = parser.parseCommand(textCommand);
                     commandPool.add(currentCommand);
                     notifyGraphicsObservers();
@@ -123,11 +132,6 @@ public class Model implements IModel {
             } catch (WrongParserCommandException e) {
                 log.info("Incorrect command from server");
             }
-        }
-        try {
-            socket.close();
-        } catch (IOException e) {
-            log.error("Failure to close connection to server");
         }
         status = ServerStatus.SERVER_IS_UNAVAILABLE;
         notifyModelObservers();
@@ -166,9 +170,8 @@ public class Model implements IModel {
     @Override
     public void stopConnection() {
         try {
+            isStopped = true;
             socket.getInputStream().close();
-            bufferedReader.close();
-            socket.close();
             log.info("Connection to server stopped");
         } catch (IOException e) {
             log.error("Failure to stop the connection to server");

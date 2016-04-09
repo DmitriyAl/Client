@@ -49,7 +49,7 @@ public class BinomialCoefficientCalculator {
     }
 
     private static void calculateNewCoefficients(int n) {
-        maxBigIntCoefficient = n * 2;
+        maxBigIntCoefficient = n + 100;
         bigIntCoefficients = new BigDecimal[maxBigIntCoefficient][maxBigIntCoefficient];
         initBigInt(maxBigIntCoefficient);
     }

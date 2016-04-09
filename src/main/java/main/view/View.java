@@ -38,9 +38,8 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private Color errorColor;
     private Color backGround;
     private DeskPainter deskPainter;
-    private static View instance;
     private ServerStatus serverStatus;
-
+    private static View instance;
 
     private View(IModel model) {
         this.model = model;
@@ -206,6 +205,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         if (drawingTypeJComboBox.getSelectedItem() == DrawingType.BEZIER) {
             deskPainter.setAccuracy(accuracySlider.getValue());
         }
+        clearScreen.setEnabled(true);
     }
 
     private boolean accuracySettings() {
@@ -232,7 +232,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         host.setEnabled(!b);
         pauseConnection.setEnabled(b);
         stopConnection.setEnabled(b);
-        clearScreen.setEnabled(b);
     }
 
     @Override
@@ -267,5 +266,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     @Override
     public void clearScreen() {
         deskPainter.clearScreen();
+        deskPainter.redraw(desk);
+        desk.repaint();
     }
 }

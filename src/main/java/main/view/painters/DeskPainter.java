@@ -32,4 +32,10 @@ public class DeskPainter {
     public void setAccuracy(int value) {
         calculator.setAccuracy(value);
     }
+
+    public void redraw(JPanel desk) {
+        DrawingBoard drawingBoard = (DrawingBoard) desk;
+        drawingBoard.setCurrentDrawingPicture(calculator.getTransformedPoints());
+        drawingBoard.setSavedPictures(calculator.getPicture());
+    }
 }
