@@ -7,15 +7,12 @@ import main.model.Model;
 import main.model.parsers.Parser;
 import main.view.IView;
 import main.view.View;
-import org.apache.log4j.Logger;
 
 /**
  * @author Dmitriy Albot
  */
 public class Main {
-    private static Logger log = Logger.getLogger(Main.class);
     public static void main(String[] args) {
-
         Parser parser = new MACCommandPointParser();
         Model model = new Model(parser);
         IView view = View.getInstance(model);

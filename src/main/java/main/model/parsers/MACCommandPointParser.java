@@ -58,7 +58,7 @@ public class MACCommandPointParser implements Parser {
                 throw new WrongMACAddressException("Wrong MAC address");
             }
             try {
-                int number = Integer.parseInt(currentNumber, 16);
+                Integer.parseInt(currentNumber, 16);
             } catch (NumberFormatException e) {
                 throw new WrongMACAddressException("Wrong MAC address");
             }
