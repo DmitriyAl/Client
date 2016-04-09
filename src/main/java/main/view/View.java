@@ -5,6 +5,7 @@ import main.model.*;
 import main.view.painters.*;
 import main.view.painters.exceptions.IncorrectBezierAccuracyValue;
 import main.view.painters.PointCalculatorsFactory;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -40,6 +41,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     private DeskPainter deskPainter;
     private ServerStatus serverStatus;
     private static View instance;
+    private static Logger log = Logger.getLogger(View.class);
 
     private View(IModel model) {
         this.model = model;
@@ -268,5 +270,6 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         deskPainter.clearScreen();
         deskPainter.redraw(desk);
         desk.repaint();
+        log.info("Screen cleared");
     }
 }

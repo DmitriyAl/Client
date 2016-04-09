@@ -73,18 +73,9 @@ public class Model implements IModel {
     @Override
     public void startClient() {
         isStopped = false;
-        try {
-            boolean isConnectedToServer = establishConnection();
-            if (isConnectedToServer) {
-                startReceiveingMessage();
-            }
-        } finally {
-            try {
-                bufferedReader.close();
-                socket.close();
-            } catch (IOException e) {
-                log.error("Failure to close connection to server");
-            }
+        boolean isConnectedToServer = establishConnection();
+        if (isConnectedToServer) {
+            startReceiveingMessage();
         }
     }
 
@@ -105,36 +96,45 @@ public class Model implements IModel {
     }
 
     private void startReceiveingMessage() {
-        while (!isStopped) {
-            synchronized (lock) {
-                if (isPaused) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        log.warn("Connection to server is not paused", e);
+        try {
+            while (!isStopped) {
+                synchronized (lock) {
+                    if (isPaused) {
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            log.warn("Connection to server is not paused", e);
+                        }
                     }
                 }
-            }
-            String textCommand;
-            try {
-                textCommand = bufferedReader.readLine();
-            } catch (IOException e) {
-                status = ServerStatus.SERVER_IS_UNAVAILABLE;
-                notifyModelObservers();
-                break;
-            }
-            try {
-                if (!textCommand.isEmpty()) {
-                    Command currentCommand = parser.parseCommand(textCommand);
-                    commandPool.add(currentCommand);
-                    notifyGraphicsObservers();
+                String textCommand;
+                try {
+                    textCommand = bufferedReader.readLine();
+                } catch (IOException e) {
+                    status = ServerStatus.SERVER_IS_UNAVAILABLE;
+                    notifyModelObservers();
+                    break;
                 }
-            } catch (WrongParserCommandException e) {
-                log.info("Incorrect command from server");
+                try {
+                    if (!textCommand.isEmpty()) {
+                        Command currentCommand = parser.parseCommand(textCommand);
+                        commandPool.add(currentCommand);
+                        notifyGraphicsObservers();
+                    }
+                } catch (WrongParserCommandException e) {
+                    log.info("Incorrect command from server");
+                }
             }
+        } finally {
+            try {
+                bufferedReader.close();
+                socket.close();
+            } catch (IOException e) {
+                log.error("Failure to close connection to server", e);
+            }
+            status = ServerStatus.SERVER_IS_UNAVAILABLE;
+            notifyModelObservers();
         }
-        status = ServerStatus.SERVER_IS_UNAVAILABLE;
-        notifyModelObservers();
     }
 
     @Override

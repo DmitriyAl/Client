@@ -16,7 +16,6 @@ public abstract class PointCalculator {
     protected List<Point> transformedPoints;
     protected List<List<Point>> picture;
     protected float accuracy;
-    private static Logger log = Logger.getLogger(PointCalculator.class);
 
     public PointCalculator() {
         currentCommands = new LinkedList<>();
@@ -42,6 +41,5 @@ public abstract class PointCalculator {
         picture = new LinkedList<>();
         currentCommands = new LinkedList<>();
         transformedPoints = new LinkedList<>();
-        log.info("Screen cleared");
     }
 }
