@@ -8,6 +8,13 @@
     <artifactId>client</artifactId>
     <version>1.0</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <product.title>Client</product.title>
+        <product.year>2016</product.year>
+        <jdkVersion>1.7</jdkVersion>
+    </properties>
+
     <build>
         <finalName>albot_client</finalName>
         <plugins>
@@ -19,6 +26,7 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -29,6 +37,8 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
                             <mainClass>main.Main</mainClass>
                         </manifest>
                     </archive>
