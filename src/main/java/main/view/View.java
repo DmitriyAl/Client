@@ -5,10 +5,10 @@ import main.model.GraphicsObserver;
 import main.model.IModel;
 import main.model.ModelObserver;
 import main.model.ServerStatus;
-import main.view.painters.DeskPainter;
-import main.view.painters.DrawingType;
-import main.view.painters.PointCalculatorsFactory;
-import main.view.painters.exceptions.IncorrectBezierAccuracyValue;
+import main.view.painter.DeskPainter;
+import main.view.painter.DrawingType;
+import main.view.painter.point_calculators.PointCalculatorsFactory;
+import main.view.painter.exceptions.IncorrectBezierAccuracyValue;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;

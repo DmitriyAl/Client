@@ -1,9 +1,7 @@
-package main.view.painters;
+package main.view.painter.point_calculators;
 
-import main.view.painters.exceptions.NoSuchPointCalculatorException;
-import main.view.painters.point_calculators.BezierPointCalculator;
-import main.view.painters.point_calculators.LinePointCalculator;
-import main.view.painters.point_calculators.PointCalculator;
+import main.view.painter.DrawingType;
+import main.view.painter.exceptions.NoSuchPointCalculatorException;
 
 /**
  * @author Dmitriy Albot

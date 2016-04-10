@@ -1,9 +1,9 @@
-package main.view.painters;
+package main.view.painter;
 
 import main.model.Command;
 import main.model.Point;
 import main.view.DrawingBoard;
-import main.view.painters.point_calculators.PointCalculator;
+import main.view.painter.point_calculators.PointCalculator;
 
 import javax.swing.*;
 import java.util.Deque;

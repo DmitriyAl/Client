@@ -2,8 +2,8 @@ package main.view;
 
 import main.model.CommandType;
 import main.model.Point;
-import main.view.painters.ColorLibrary;
-import main.view.painters.exceptions.NoSuchColorInLibraryException;
+import main.view.painter.libraries.ColorLibrary;
+import main.view.painter.exceptions.NoSuchColorInLibraryException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,7 +48,7 @@ public class DrawingBoard extends JPanel {
 
     private void draw(final Graphics graphics, List<Point> picture) {
         for (int i = 0; i < picture.size() - 1; i++) {
-            Point point = picture.get(i); //todo check last or first
+            Point point = picture.get(i);
             Color color;
             try {
                 color = ColorLibrary.getColor(point.getColor());

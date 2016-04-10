@@ -1,4 +1,4 @@
-package main.view.painters;
+package main.view.painter;
 
 /**
  * @author Dmitriy Albot

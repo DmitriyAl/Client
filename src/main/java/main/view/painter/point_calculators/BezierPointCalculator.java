@@ -1,9 +1,9 @@
-package main.view.painters.point_calculators;
+package main.view.painter.point_calculators;
 
 import main.model.Command;
 import main.model.CommandType;
 import main.model.Point;
-import main.view.painters.helpers.BinomialCoefficientCalculator;
+import main.view.painter.libraries.BinomialCoefficientCalculator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

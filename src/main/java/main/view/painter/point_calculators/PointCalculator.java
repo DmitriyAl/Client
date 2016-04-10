@@ -1,8 +1,9 @@
-package main.view.painters.point_calculators;
+package main.view.painter.point_calculators;
 
 import main.model.Command;
 import main.model.Point;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,8 +38,8 @@ public abstract class PointCalculator {
     public abstract List<Point> transformToDrawingPoints(Deque<Command> commands);
 
     public void clearScreen() {
-        picture = new LinkedList<>();
-        currentCommands = new LinkedList<>();
-        transformedPoints = new LinkedList<>();
+        picture = new ArrayList<>();
+        currentCommands = new ArrayList<>();
+        transformedPoints = new ArrayList<>();
     }
 }

@@ -1,4 +1,4 @@
-package main.view.painters.helpers;
+package main.view.painter.libraries;
 
 import java.math.BigDecimal;
 
