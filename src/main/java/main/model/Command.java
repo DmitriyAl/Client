@@ -25,13 +25,4 @@ public class Command {
     public Point getPoint() {
         return point;
     }
-
-    @Override
-    public String toString() {
-        return "Command{" +
-                "mac='" + mac + '\'' +
-                ", type=" + type +
-                ", point=" + point +
-                '}';
-    }
 }

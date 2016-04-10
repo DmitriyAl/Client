@@ -16,7 +16,7 @@ public class MACCommandPointParser implements Parser {
     private static Logger log = Logger.getLogger(MACCommandPointParser.class);
 
     @Override
-    public Command parseCommand(String command) throws WrongParserCommandException {
+    public Command parseCommand(String command) {
         StringTokenizer parser = new StringTokenizer(command, ";");
         if (parser.countTokens() != 5) {
             throw new WrongParserCommandException("Wrong command format");
@@ -48,7 +48,7 @@ public class MACCommandPointParser implements Parser {
         }
     }
 
-    private void analyzeMAC(String mac) throws WrongMACAddressException {
+    private void analyzeMAC(String mac) {
         StringTokenizer parser = new StringTokenizer(mac, ":");
         if (parser.countTokens() != 6) {
             throw new WrongMACAddressException("Wrong MAC address");

@@ -184,5 +184,4 @@ public class Model implements IModel {
             log.error("Failure to stop the connection to server");
         }
     }
-
 }

@@ -46,13 +46,4 @@ public class Point {
     public void setCommand(CommandType command) {
         this.command = command;
     }
-
-    @Override
-    public String toString() {
-        return "Point{" +
-                "x=" + x +
-                ", y=" + y +
-                ", colour=" + colour +
-                '}';
-    }
 }

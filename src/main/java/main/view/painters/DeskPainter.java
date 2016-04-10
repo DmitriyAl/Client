@@ -25,6 +25,7 @@ public class DeskPainter {
         drawingBoard.setCurrentDrawingPicture(transformedPoints);
         drawingBoard.setSavedPictures(calculator.getPicture());
     }
+
     public void clearScreen() {
         calculator.clearScreen();
     }

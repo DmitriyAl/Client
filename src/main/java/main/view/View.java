@@ -7,8 +7,8 @@ import main.model.ModelObserver;
 import main.model.ServerStatus;
 import main.view.painters.DeskPainter;
 import main.view.painters.DrawingType;
-import main.view.painters.point_calculators.PointCalculatorFactory;
 import main.view.painters.exceptions.IncorrectBezierAccuracyValue;
+import main.view.painters.point_calculators.PointCalculatorFactory;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -62,6 +62,11 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             instance = new View(model);
         }
         return instance;
+    }
+
+    @Override
+    public void setController(IController controller) {
+        this.controller = controller;
     }
 
     private void initGraphics() {
@@ -210,7 +215,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             return;
         }
         controller.startConnection();
-        deskPainter = new DeskPainter(PointCalculatorFactory.getPainter((DrawingType)drawingTypeJComboBox.getSelectedItem()));
+        deskPainter = new DeskPainter(PointCalculatorFactory.getPainter((DrawingType) drawingTypeJComboBox.getSelectedItem()));
         if (drawingTypeJComboBox.getSelectedItem() == DrawingType.BEZIER) {
             deskPainter.setAccuracy(accuracySlider.getValue());
         }
@@ -244,6 +249,14 @@ public class View implements IView, GraphicsObserver, ModelObserver {
     }
 
     @Override
+    public void clearScreen() {
+        deskPainter.clearScreen();
+        deskPainter.redraw(desk);
+        desk.repaint();
+        log.info("Screen cleared");
+    }
+
+    @Override
     public void updateGraphics() {
         deskPainter.draw(desk, model.getCommandPool());
         desk.repaint();
@@ -265,18 +278,5 @@ public class View implements IView, GraphicsObserver, ModelObserver {
                 status.setText("Unknown server status");
                 break;
         }
-    }
-
-    @Override
-    public void setController(IController controller) {
-        this.controller = controller;
-    }
-
-    @Override
-    public void clearScreen() {
-        deskPainter.clearScreen();
-        deskPainter.redraw(desk);
-        desk.repaint();
-        log.info("Screen cleared");
     }
 }

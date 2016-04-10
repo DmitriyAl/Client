@@ -62,7 +62,7 @@ public class BinomialCoefficientCalculator {
         initBigInt(maxBigDecimalCoefficient);
     }
 
-    private static void check(int n, int k) throws IncorrectCoefficientException {
+    private static void check(int n, int k) {
         if (k > n) {
             throw new IncorrectCoefficientException();
         }

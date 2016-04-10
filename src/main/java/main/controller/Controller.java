@@ -56,7 +56,7 @@ public class Controller implements IController {
         }
     }
 
-    private void parseHost(String host) throws InvalidHostException {
+    private void parseHost(String host) {
         StringTokenizer parser = new StringTokenizer(host, ".");
         if (parser.countTokens() != 4) {
             throw new InvalidHostException();
