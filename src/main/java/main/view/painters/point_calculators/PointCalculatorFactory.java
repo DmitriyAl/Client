@@ -1,12 +1,12 @@
-package main.view.painter.point_calculators;
+package main.view.painters.point_calculators;
 
-import main.view.painter.DrawingType;
-import main.view.painter.exceptions.NoSuchPointCalculatorException;
+import main.view.painters.DrawingType;
+import main.view.painters.exceptions.NoSuchPointCalculatorException;
 
 /**
  * @author Dmitriy Albot
  */
-public class PointCalculatorsFactory {
+public class PointCalculatorFactory {
     public static PointCalculator getPainter(DrawingType type) {
         switch (type) {
             case BEZIER:

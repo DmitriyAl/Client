@@ -1,5 +1,7 @@
 package main.model;
 
+import main.model.parsers.Parser;
+
 import java.util.Deque;
 
 /**
@@ -16,6 +18,7 @@ public interface IModel {
     void resumeConnection();
     void setHost(String host);
     void setPort(int port);
+    void setParser(Parser parser);
     ServerStatus getServerStatus();
     void stopConnection();
 }

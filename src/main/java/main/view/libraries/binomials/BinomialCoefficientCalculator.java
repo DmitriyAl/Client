@@ -1,4 +1,6 @@
-package main.view.painter.libraries;
+package main.view.libraries.binomials;
+
+import main.view.libraries.binomials.exceptions.IncorrectCoefficientException;
 
 import java.math.BigDecimal;
 
@@ -9,11 +11,11 @@ public class BinomialCoefficientCalculator {
     private static BigDecimal[][] bigIntCoefficients;
     private static long[][] longCoefficients;
     private static final int MAX_LONG_COEFFICIENT = 66;
-    private static int maxBigIntCoefficient;
+    private static int maxBigDecimalCoefficient;
 
     static {
-        maxBigIntCoefficient = 200;
-        initBigInt(maxBigIntCoefficient);
+        maxBigDecimalCoefficient = 200;
+        initBigInt(maxBigDecimalCoefficient);
         initFloat(MAX_LONG_COEFFICIENT);
     }
 
@@ -39,7 +41,13 @@ public class BinomialCoefficientCalculator {
         }
     }
 
-    public static BigDecimal getBigIntCoefficient(int n, int k) {
+    public static long getLongCoefficient(int n, int k) {
+        check(n, k);
+        return longCoefficients[n][k];
+    }
+
+    public static BigDecimal getBigDecimalCoefficient(int n, int k) {
+        check(n, k);
         try {
             return bigIntCoefficients[n][k];
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -49,12 +57,14 @@ public class BinomialCoefficientCalculator {
     }
 
     private static void calculateNewCoefficients(int n) {
-        maxBigIntCoefficient = n + 100;
-        bigIntCoefficients = new BigDecimal[maxBigIntCoefficient][maxBigIntCoefficient];
-        initBigInt(maxBigIntCoefficient);
+        maxBigDecimalCoefficient = n + 100;
+        bigIntCoefficients = new BigDecimal[maxBigDecimalCoefficient][maxBigDecimalCoefficient];
+        initBigInt(maxBigDecimalCoefficient);
     }
 
-    public static long getLongCoefficient(int n, int k) {
-        return longCoefficients[n][k];
+    private static void check(int n, int k) throws IncorrectCoefficientException {
+        if (k > n) {
+            throw new IncorrectCoefficientException();
+        }
     }
 }

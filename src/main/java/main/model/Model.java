@@ -17,20 +17,19 @@ import java.util.List;
  * @author Dmitriy Albot
  */
 public class Model implements IModel {
-    private String host;
-    private int port;
     private Parser parser;
     private List<GraphicsObserver> graphicsObservers;
     private List<ModelObserver> modelObservers;
     private Deque<Command> commandPool;
+    private String host;
+    private int port;
     private BufferedReader bufferedReader;
-    private volatile Socket socket;
-    private final Object lock = new Object();
-    private volatile boolean isPaused;
+    private Socket socket;
     private ServerStatus status;
-    private static Logger log = Logger.getLogger(Model.class);
+    private volatile boolean isPaused;
     private volatile boolean isStopped;
-
+    private final Object lock = new Object();
+    private static Logger log = Logger.getLogger(Model.class);
 
     public Model() {
         this.status = ServerStatus.SERVER_IS_UNAVAILABLE;
@@ -41,6 +40,11 @@ public class Model implements IModel {
 
     public Model(Parser parser) {
         this();
+        this.parser = parser;
+    }
+
+    @Override
+    public void setParser(Parser parser) {
         this.parser = parser;
     }
 
@@ -180,4 +184,5 @@ public class Model implements IModel {
             log.error("Failure to stop the connection to server");
         }
     }
+
 }

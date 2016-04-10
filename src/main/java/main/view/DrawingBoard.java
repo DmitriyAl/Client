@@ -2,8 +2,8 @@ package main.view;
 
 import main.model.CommandType;
 import main.model.Point;
-import main.view.painter.libraries.ColorLibrary;
-import main.view.painter.exceptions.NoSuchColorInLibraryException;
+import main.view.libraries.colors.ColorLibrary;
+import main.view.libraries.colors.exceptions.NoSuchColorInLibraryException;
 
 import javax.swing.*;
 import java.awt.*;

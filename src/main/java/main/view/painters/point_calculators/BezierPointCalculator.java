@@ -1,9 +1,9 @@
-package main.view.painter.point_calculators;
+package main.view.painters.point_calculators;
 
 import main.model.Command;
 import main.model.CommandType;
 import main.model.Point;
-import main.view.painter.libraries.BinomialCoefficientCalculator;
+import main.view.libraries.binomials.BinomialCoefficientCalculator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -82,8 +82,8 @@ public class BezierPointCalculator extends PointCalculator {
                 float currentY = point.getY();
                 double tInPower = Math.pow(t, j);
                 double oneMinusTInPower = Math.pow(1 - t, size - 1 - j);
-                xCoord += Float.valueOf(String.valueOf(BinomialCoefficientCalculator.getBigIntCoefficient(size - 1, j).multiply(new BigDecimal(currentX * tInPower * oneMinusTInPower))));
-                yCoord += Float.valueOf(String.valueOf(BinomialCoefficientCalculator.getBigIntCoefficient(size - 1, j).multiply(new BigDecimal(currentY * tInPower * oneMinusTInPower))));
+                xCoord += Float.valueOf(String.valueOf(BinomialCoefficientCalculator.getBigDecimalCoefficient(size - 1, j).multiply(new BigDecimal(currentX * tInPower * oneMinusTInPower))));
+                yCoord += Float.valueOf(String.valueOf(BinomialCoefficientCalculator.getBigDecimalCoefficient(size - 1, j).multiply(new BigDecimal(currentY * tInPower * oneMinusTInPower))));
             }
             Point bezierPoint = formAnewPoint(transformedPoints, xCoord, yCoord, point);
             transformedPoints.add(bezierPoint);

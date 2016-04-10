@@ -1,5 +1,7 @@
-package main.model;
+package main.model.parsers;
 
+import main.model.Command;
+import main.model.Point;
 import main.model.parsers.MACCommandPointParser;
 import org.junit.Assert;
 import org.junit.Test;

@@ -5,10 +5,10 @@ import main.model.GraphicsObserver;
 import main.model.IModel;
 import main.model.ModelObserver;
 import main.model.ServerStatus;
-import main.view.painter.DeskPainter;
-import main.view.painter.DrawingType;
-import main.view.painter.point_calculators.PointCalculatorsFactory;
-import main.view.painter.exceptions.IncorrectBezierAccuracyValue;
+import main.view.painters.DeskPainter;
+import main.view.painters.DrawingType;
+import main.view.painters.point_calculators.PointCalculatorFactory;
+import main.view.painters.exceptions.IncorrectBezierAccuracyValue;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -144,8 +144,10 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             public void actionPerformed(ActionEvent e) {
                 if (pauseConnection.isSelected()) {
                     controller.pauseConnection();
+                    status.setText("Connection is paused");
                 } else {
                     controller.resumeConnection();
+                    status.setText("Connection is resumed");
                 }
             }
         });
@@ -166,6 +168,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.clearScreen();
+                status.setText("Screen is cleared");
             }
         });
         stopConnection.addActionListener(new ActionListener() {
@@ -207,7 +210,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
             return;
         }
         controller.startConnection();
-        deskPainter = new DeskPainter(PointCalculatorsFactory.getPainter((DrawingType)drawingTypeJComboBox.getSelectedItem()));
+        deskPainter = new DeskPainter(PointCalculatorFactory.getPainter((DrawingType)drawingTypeJComboBox.getSelectedItem()));
         if (drawingTypeJComboBox.getSelectedItem() == DrawingType.BEZIER) {
             deskPainter.setAccuracy(accuracySlider.getValue());
         }

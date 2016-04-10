@@ -1,4 +1,4 @@
-package main.view.painter.point_calculators;
+package main.view.painters.point_calculators;
 
 import main.model.Command;
 import main.model.Point;
