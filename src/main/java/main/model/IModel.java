@@ -12,13 +12,13 @@ public interface IModel {
     void addModelObserver(ModelObserver modelObserver);
     void notifyGraphicsObservers();
     void notifyModelObservers();
-    Deque<Command> getCommandPool();
     void startClient();
     void pauseConnection();
     void resumeConnection();
+    void stopConnection();
     void setHost(String host);
     void setPort(int port);
     void setParser(Parser parser);
     ServerStatus getServerStatus();
-    void stopConnection();
+    Deque<Command> getCommandPool();
 }

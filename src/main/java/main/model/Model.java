@@ -49,6 +49,21 @@ public class Model implements IModel {
     }
 
     @Override
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    @Override
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    @Override
+    public ServerStatus getServerStatus() {
+        return status;
+    }
+
+    @Override
     public void addGraphicsObserver(GraphicsObserver graphicsObserver) {
         graphicsObservers.add(graphicsObserver);
     }
@@ -157,21 +172,6 @@ public class Model implements IModel {
             lock.notifyAll();
             log.info("Connection to server is resumed");
         }
-    }
-
-    @Override
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    @Override
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    @Override
-    public ServerStatus getServerStatus() {
-        return status;
     }
 
     @Override
