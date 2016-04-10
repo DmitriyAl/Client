@@ -9,9 +9,6 @@ public class Point {
     private int colour;
     private CommandType command;
 
-    public Point() {
-    }
-
     public Point(float x, float y) {
         this.x = x;
         this.y = y;

@@ -6,7 +6,7 @@ import main.view.DrawingBoard;
 import main.view.painters.point_calculators.PointCalculator;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.Deque;
 import java.util.List;
 
 /**

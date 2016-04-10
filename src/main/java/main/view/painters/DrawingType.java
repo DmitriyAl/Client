@@ -5,5 +5,5 @@ package main.view.painters;
  */
 public enum DrawingType {
     BEZIER,
-    LINES,
+    LINES
 }

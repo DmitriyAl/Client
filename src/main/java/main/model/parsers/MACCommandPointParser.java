@@ -1,10 +1,11 @@
 package main.model.parsers;
 
-import main.model.*;
+import main.model.Command;
+import main.model.CommandType;
+import main.model.Point;
 import main.model.parsers.exceptions.WrongMACAddressException;
 import main.model.parsers.exceptions.WrongParserCommandException;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 
 import java.util.StringTokenizer;
 

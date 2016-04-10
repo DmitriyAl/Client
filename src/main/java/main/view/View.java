@@ -1,10 +1,14 @@
 package main.view;
 
 import main.controller.IController;
-import main.model.*;
-import main.view.painters.*;
-import main.view.painters.exceptions.IncorrectBezierAccuracyValue;
+import main.model.GraphicsObserver;
+import main.model.IModel;
+import main.model.ModelObserver;
+import main.model.ServerStatus;
+import main.view.painters.DeskPainter;
+import main.view.painters.DrawingType;
 import main.view.painters.PointCalculatorsFactory;
+import main.view.painters.exceptions.IncorrectBezierAccuracyValue;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;

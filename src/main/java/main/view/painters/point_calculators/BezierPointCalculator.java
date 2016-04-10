@@ -1,12 +1,15 @@
 package main.view.painters.point_calculators;
 
-import main.model.*;
+import main.model.Command;
+import main.model.CommandType;
 import main.model.Point;
 import main.view.painters.helpers.BinomialCoefficientCalculator;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
 
 /**
  * @author Dmitriy Albot

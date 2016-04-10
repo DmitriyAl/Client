@@ -1,6 +1,6 @@
 package main.view;
 
-import main.model.*;
+import main.model.CommandType;
 import main.model.Point;
 import main.view.painters.ColorLibrary;
 import main.view.painters.exceptions.NoSuchColorInLibraryException;

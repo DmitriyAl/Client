@@ -1,6 +1,5 @@
 package main.view.painters;
 
-import main.view.painters.DrawingType;
 import main.view.painters.exceptions.NoSuchPointCalculatorException;
 import main.view.painters.point_calculators.BezierPointCalculator;
 import main.view.painters.point_calculators.LinePointCalculator;

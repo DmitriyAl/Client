@@ -2,8 +2,8 @@ package main;
 
 import main.controller.Controller;
 import main.controller.IController;
-import main.model.parsers.MACCommandPointParser;
 import main.model.Model;
+import main.model.parsers.MACCommandPointParser;
 import main.model.parsers.Parser;
 import main.view.IView;
 import main.view.View;

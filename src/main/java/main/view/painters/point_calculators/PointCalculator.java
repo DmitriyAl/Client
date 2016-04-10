@@ -2,7 +2,6 @@ package main.view.painters.point_calculators;
 
 import main.model.Command;
 import main.model.Point;
-import org.apache.log4j.Logger;
 
 import java.util.Deque;
 import java.util.LinkedList;
