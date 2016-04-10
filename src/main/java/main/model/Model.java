@@ -85,12 +85,12 @@ public class Model implements IModel {
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             status = ServerStatus.SERVER_IS_AVAILABLE;
             notifyModelObservers();
-            log.info("Connection to server is established");
+            log.info("Connection to server " + socket.getRemoteSocketAddress() + " is established");
             return true;
         } catch (IOException e) {
             status = ServerStatus.SERVER_IS_UNAVAILABLE;
             notifyModelObservers();
-            log.info("Server is unavailable");
+            log.info("Server " + host + ":" + port + " is unavailable");
             return false;
         }
     }
@@ -172,7 +172,7 @@ public class Model implements IModel {
         try {
             isStopped = true;
             socket.getInputStream().close();
-            log.info("Connection to server stopped");
+            log.info("Connection to server " + socket.getRemoteSocketAddress().toString() + " is stopped");
         } catch (IOException e) {
             log.error("Failure to stop the connection to server");
         }

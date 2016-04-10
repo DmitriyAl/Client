@@ -76,7 +76,7 @@ public class View implements IView, GraphicsObserver, ModelObserver {
         clearScreen = new JButton("Clear screen");
         clearScreen.setEnabled(false);
         host = new JTextField("127.0.0.1");
-        port = new JTextField("29228");
+        port = new JTextField("29288");
         accuracySlider = new JSlider(SwingConstants.HORIZONTAL, 1, 200, 100);
         accuracySlider.setPreferredSize(new Dimension(50, 20));
         accuracySlider.setPaintTicks(true);
