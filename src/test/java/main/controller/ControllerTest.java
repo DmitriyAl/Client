@@ -4,6 +4,7 @@ import main.model.Model;
 import main.view.View;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * @author Dmitriy Albot
@@ -11,8 +12,8 @@ import org.junit.Test;
 public class ControllerTest {
     @Test
     public void setHostTest() {
-        Model model = new Model();
-        View view = View.getInstance(model);
+        View view = Mockito.mock(View.class);
+        Model model = Mockito.mock(Model.class);
         Controller controller = new Controller(model,view);
         Assert.assertTrue(controller.setHost("255.255.255.255"));
         Assert.assertTrue(controller.setHost("0.0.0.0"));
@@ -23,8 +24,8 @@ public class ControllerTest {
 
     @Test
     public void setPortTest() {
-        Model model = new Model();
-        View view = View.getInstance(model);
+        View view = Mockito.mock(View.class);
+        Model model = Mockito.mock(Model.class);
         Controller controller = new Controller(model,view);
         Assert.assertTrue(controller.setPort("0"));
         Assert.assertTrue(controller.setPort("65535"));
